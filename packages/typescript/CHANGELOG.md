@@ -5,6 +5,14 @@ Changes to `@hardcover/sdk`, newest first. The format follows
 [Semantic Versioning](https://semver.org/). Before 1.0, a minor version (0.2.0)
 may rename or remove things; each one is listed here with what to change.
 
+## Unreleased
+
+### Changed
+
+- The README and the package's homepage now link to the
+  [documentation](https://docs.hardcover.app/sdk/typescript/) rather than the
+  repository.
+
 ## 0.1.0 - 2026-10-22
 
 The first release.

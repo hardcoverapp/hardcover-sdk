@@ -11,7 +11,7 @@
     "sdk",
     "oauth"
   ],
-  "homepage": "https://github.com/hardcoverapp/community-sdk/tree/main/packages/typescript#readme",
+  "homepage": "https://docs.hardcover.app/sdk/typescript/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hardcoverapp/community-sdk.git",

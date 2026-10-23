@@ -5,6 +5,10 @@ built by the Hardcover team for the community. It runs in Node 22.12+,
 browsers, Deno, Bun and React Native (Hermes), with no runtime dependencies.
 It's ES modules only; CommonJS code on Node 22.12+ can still `require()` it.
 
+**[Documentation](https://docs.hardcover.app/sdk/typescript/)**: getting
+started, guides, and every method with a live example you can run with your
+own token.
+
 > **0.x: early release.** Everything works against the live API. Names may
 > still change before 1.0 based on what people building with it tell us;
 > [open an issue](https://github.com/hardcoverapp/community-sdk/issues) with
@@ -22,6 +26,8 @@ any packages you already list there). Vitest needs nothing.
 
 Get a personal access token at hardcover.app → Account → API Access. Keep it
 out of source control and out of browser bundles.
+[Getting started](https://docs.hardcover.app/sdk/typescript/0.1/getting-started/)
+walks through it.
 
 ```ts
 import { HardcoverClient, UserBookStatus } from "@hardcover/sdk";
@@ -45,7 +51,8 @@ allow, with the same auth, retries and errors.
 Apps that act for other people use OAuth. The session owns the tokens:
 it refreshes them before they expire, never spends a refresh token twice,
 stores each new pair before using it, and tells you once when the user needs
-to sign in again. You decide where tokens are stored.
+to sign in again. You decide where tokens are stored. See
+[Sign people in](https://docs.hardcover.app/sdk/typescript/0.1/guides/sign-in/).
 
 ```ts
 import * as SecureStore from "expo-secure-store";
@@ -85,7 +92,8 @@ for await (const book of allPages((page) => hc.authors.books(authorId, page))) {
 
 Each list has a most it returns per request (100 for lists and activities, 1,000
 for books). Asking for more is safe: the client sends that list's most, and
-`hasMore` still tells you whether there's another page.
+`hasMore` still tells you whether there's another page. See
+[Paging](https://docs.hardcover.app/sdk/typescript/0.1/client-and-helpers/#paging).
 
 ## Reading stats
 
@@ -100,7 +108,9 @@ console.log(year.books, year.pages, year.authors[0]?.author.name);
 ```
 
 To compare periods without fetching again, call `fetchStatsData(hc)` once and
-`computeStats(data, period)` for each.
+`computeStats(data, period)` for each. See
+[Stats](https://docs.hardcover.app/sdk/typescript/0.1/resources/stats/) and
+[A reader's year](https://docs.hardcover.app/sdk/typescript/0.1/guides/a-readers-year/).
 
 ## What the client handles
 
@@ -115,10 +125,15 @@ To compare periods without fetching again, call `fetchStatsData(hc)` once and
 - **Testing.** `MockTransport` from `@hardcover/sdk/testing` drives a real
   client with canned responses.
 
+[Handle errors and test your app](https://docs.hardcover.app/sdk/typescript/0.1/guides/errors-and-testing/)
+covers both, and
+[Client and helpers](https://docs.hardcover.app/sdk/typescript/0.1/client-and-helpers/)
+lists every option, enum and error.
+
 ## More
 
-- [Examples](https://github.com/hardcoverapp/community-sdk/tree/main/packages/typescript/examples),
-  each one type-checked against the SDK
+- [Guides](https://docs.hardcover.app/sdk/typescript/0.1/) for whole tasks,
+  and a page per resource with every method and a live example
+- [Changelog](https://docs.hardcover.app/sdk/typescript/changelog/)
 - [The design and the API it wraps](https://github.com/hardcoverapp/community-sdk/tree/main/spec)
-- [Changelog](https://github.com/hardcoverapp/community-sdk/blob/main/packages/typescript/CHANGELOG.md)
 - [Issues](https://github.com/hardcoverapp/community-sdk/issues)
