@@ -27,10 +27,13 @@ export async function friendsWhoReadIt(hc: HardcoverClient, bookId: number) {
 export async function yourFeed(hc: HardcoverClient) {
   const { items } = await hc.activities.following({ limit: 20 });
 
-  for (const activity of items) {
-    // A like on an activity; a review is liked as its library entry (LikeableType.Review).
-    const likes = await hc.likes.like(LikeableType.Activity, activity.id);
-    console.log(activity.user.username, activity.event, `${likes} likes`);
+  for (const activity of items) console.log(activity.user.username, activity.event);
+
+  // Like one the reader tapped. A review is liked as its library entry (LikeableType.Review).
+  const tapped = items[0];
+  if (tapped) {
+    const likes = await hc.likes.like(LikeableType.Activity, tapped.id);
+    console.log(`${likes} likes`);
   }
 }
 

@@ -2,8 +2,9 @@
 
 Each file is a self-contained, type-checked function you can copy into an app.
 `pnpm typecheck` compiles them against the SDK, so an API change that breaks
-an example fails CI instead of drifting from the docs. These will move into the
-Hardcover docs site pages as each resource lands there.
+an example fails CI instead of drifting from the docs. The
+[docs](https://docs.hardcover.app/sdk/typescript/) show the same calls with
+live examples you can run with your own token.
 
 | Example | Shows |
 |---|---|
