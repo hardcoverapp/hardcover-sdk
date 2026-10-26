@@ -122,6 +122,9 @@ To compare periods without fetching again, call `fetchStatsData(hc)` once and
   sign-in.
 - **Retries.** Reads are retried after network and server errors; writes are
   never sent twice.
+- **JSON columns.** Columns the API only knows as JSON come back typed, such
+  as `book.cachedImage.color` or `book.cachedFeaturedSeries.position`. Keys
+  stay as stored (`color_name`), and an empty column is `{}`.
 - **Testing.** `MockTransport` from `@hardcover/sdk/testing` drives a real
   client with canned responses.
 

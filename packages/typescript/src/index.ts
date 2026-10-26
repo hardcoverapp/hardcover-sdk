@@ -6,6 +6,7 @@ export type {
   CachedAuthor,
   CachedContributor,
   CachedFeaturedSeries,
+  CachedGenre,
   CachedImage,
   CachedSeries,
   CachedTag,

@@ -7265,7 +7265,7 @@ export type Vibes_Bool_Exp = {
 
 export type BookSummaryFragment = { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown };
 
-export type BookDetailFragment = { headline: string | null, description: string | null, id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseDate: string | null, editionsCount: number, cachedTags: unknown, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown, contributions: Array<{ contribution: string | null, author: { id: number, slug: string | null, name: string, cachedImage: unknown, booksCount: number } | null }>, bookSeries: Array<{ position: number | null, series: { id: number, slug: string, name: string, booksCount: number, primaryBooksCount: number | null, isCompleted: boolean | null } | null }> };
+export type BookDetailFragment = { headline: string | null, description: string | null, id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseDate: string | null, editionsCount: number, cachedTags: unknown, cachedHeaderImage: unknown, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown, contributions: Array<{ contribution: string | null, author: { id: number, slug: string | null, name: string, cachedImage: unknown, booksCount: number } | null }>, bookSeries: Array<{ position: number | null, series: { id: number, slug: string, name: string, booksCount: number, primaryBooksCount: number | null, isCompleted: boolean | null } | null }> };
 
 export type AuthorSummaryFragment = { id: number, slug: string | null, name: string, cachedImage: unknown, booksCount: number };
 
@@ -7295,13 +7295,13 @@ export type PromptSummaryFragment = { id: number, slug: string, question: string
 
 export type PromptAnswerFragment = { id: number, description: string | null, promptId: number, bookId: number, userId: number, createdAt: string | null };
 
-export type ActivityFragment = { id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null };
+export type ActivityFragment = { id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null };
 
 export type StatsEditionFragment = { id: number, pages: number | null, audioSeconds: number | null, readingFormatId: number };
 
-export type UserProfileFragment = { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string };
+export type UserProfileFragment = { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string };
 
-export type MeFragment = { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, accountPrivacySettingId: number, activityPrivacySettingsId: number, cachedImage: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string };
+export type MeFragment = { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, accountPrivacySettingId: number, activityPrivacySettingsId: number, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string };
 
 export type VibeSummaryFragment = { id: number, slug: string, title: string, description: string | null, featured: boolean, vibeType: number, resultType: number, privacySettingId: number, likesCount: number, userId: number, createdAt: string, updatedAt: string, booksGeneratedAt: string | null };
 
@@ -7703,14 +7703,14 @@ export type GetBookQueryVariables = Exact<{
 }>;
 
 
-export type GetBookQuery = { books_by_pk: { headline: string | null, description: string | null, id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseDate: string | null, editionsCount: number, cachedTags: unknown, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown, contributions: Array<{ contribution: string | null, author: { id: number, slug: string | null, name: string, cachedImage: unknown, booksCount: number } | null }>, bookSeries: Array<{ position: number | null, series: { id: number, slug: string, name: string, booksCount: number, primaryBooksCount: number | null, isCompleted: boolean | null } | null }> } | null };
+export type GetBookQuery = { books_by_pk: { headline: string | null, description: string | null, id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseDate: string | null, editionsCount: number, cachedTags: unknown, cachedHeaderImage: unknown, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown, contributions: Array<{ contribution: string | null, author: { id: number, slug: string | null, name: string, cachedImage: unknown, booksCount: number } | null }>, bookSeries: Array<{ position: number | null, series: { id: number, slug: string, name: string, booksCount: number, primaryBooksCount: number | null, isCompleted: boolean | null } | null }> } | null };
 
 export type GetBookBySlugQueryVariables = Exact<{
   slug: string;
 }>;
 
 
-export type GetBookBySlugQuery = { books: Array<{ headline: string | null, description: string | null, id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseDate: string | null, editionsCount: number, cachedTags: unknown, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown, contributions: Array<{ contribution: string | null, author: { id: number, slug: string | null, name: string, cachedImage: unknown, booksCount: number } | null }>, bookSeries: Array<{ position: number | null, series: { id: number, slug: string, name: string, booksCount: number, primaryBooksCount: number | null, isCompleted: boolean | null } | null }> }> };
+export type GetBookBySlugQuery = { books: Array<{ headline: string | null, description: string | null, id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseDate: string | null, editionsCount: number, cachedTags: unknown, cachedHeaderImage: unknown, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown, contributions: Array<{ contribution: string | null, author: { id: number, slug: string | null, name: string, cachedImage: unknown, booksCount: number } | null }>, bookSeries: Array<{ position: number | null, series: { id: number, slug: string, name: string, booksCount: number, primaryBooksCount: number | null, isCompleted: boolean | null } | null }> }> };
 
 export type GetBooksQueryVariables = Exact<{
   ids: Array<number> | number;
@@ -7924,7 +7924,7 @@ export type GetListBookIdsQuery = { list_books: Array<{ id: number }> };
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { me: Array<{ id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, accountPrivacySettingId: number, activityPrivacySettingsId: number, cachedImage: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }> };
+export type MeQuery = { me: Array<{ id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, accountPrivacySettingId: number, activityPrivacySettingsId: number, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }> };
 
 export type GetNotificationsQueryVariables = Exact<{
   userId: number;
@@ -7933,7 +7933,7 @@ export type GetNotificationsQueryVariables = Exact<{
 }>;
 
 
-export type GetNotificationsQuery = { notification_deliveries: Array<{ id: number, read: boolean, readAt: string | null, sentAt: string | null, notification: { id: number, title: string, description: string, link: string | null, priority: number | null, linkText: string | null, notificationTypeId: number, createdAt: string, notifierUser: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string } | null } | null }> };
+export type GetNotificationsQuery = { notification_deliveries: Array<{ id: number, read: boolean, readAt: string | null, sentAt: string | null, notification: { id: number, title: string, description: string, link: string | null, priority: number | null, linkText: string | null, notificationTypeId: number, createdAt: string, notifierUser: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string } | null } | null }> };
 
 export type CountUnreadNotificationsQueryVariables = Exact<{
   userId: number;
@@ -8030,14 +8030,14 @@ export type GetUserQueryVariables = Exact<{
 }>;
 
 
-export type GetUserQuery = { users_by_pk: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string } | null };
+export type GetUserQuery = { users_by_pk: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string } | null };
 
 export type GetUserByUsernameQueryVariables = Exact<{
   username: string;
 }>;
 
 
-export type GetUserByUsernameQuery = { users: Array<{ id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }> };
+export type GetUserByUsernameQuery = { users: Array<{ id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }> };
 
 export type GetFollowersQueryVariables = Exact<{
   userId: number;
@@ -8046,7 +8046,7 @@ export type GetFollowersQueryVariables = Exact<{
 }>;
 
 
-export type GetFollowersQuery = { followed_users: Array<{ id: number, createdAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string } }> };
+export type GetFollowersQuery = { followed_users: Array<{ id: number, createdAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string } }> };
 
 export type GetFollowingQueryVariables = Exact<{
   userId: number;
@@ -8055,14 +8055,14 @@ export type GetFollowingQueryVariables = Exact<{
 }>;
 
 
-export type GetFollowingQuery = { followed_users: Array<{ id: number, createdAt: string | null, followedUser: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string } }> };
+export type GetFollowingQuery = { followed_users: Array<{ id: number, createdAt: string | null, followedUser: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string } }> };
 
 export type GetBlockedUsersQueryVariables = Exact<{
   userId: number;
 }>;
 
 
-export type GetBlockedUsersQuery = { user_blocks: Array<{ id: number, type: string, createdAt: string, blockedUser: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string } | null }> };
+export type GetBlockedUsersQuery = { user_blocks: Array<{ id: number, type: string, createdAt: string, blockedUser: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string } | null }> };
 
 export type GetFriendsForBookQueryVariables = Exact<{
   userId: number;
@@ -8071,7 +8071,7 @@ export type GetFriendsForBookQueryVariables = Exact<{
 }>;
 
 
-export type GetFriendsForBookQuery = { following_user_books: Array<{ userBook: { id: number, rating: number | null, owned: boolean, reviewMarkdown: string | null, reviewHasSpoilers: boolean, reviewedAt: string | null, bookId: number, editionId: number | null, userId: number, statusId: number, privacySettingId: number, hasReview: boolean, readCount: number, dateAdded: string, firstStartedReadingDate: string | null, lastReadDate: string | null, updatedAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, userBookReads: Array<{ id: number, progress: number | null, userBookId: number, editionId: number | null, startedAt: string | null, finishedAt: string | null, finishedAtPrecision: number | null, pausedAt: string | null, progressPages: number | null, progressSeconds: number | null, edition: { id: number, pages: number | null, audioSeconds: number | null, readingFormatId: number } | null }> } | null }> };
+export type GetFriendsForBookQuery = { following_user_books: Array<{ userBook: { id: number, rating: number | null, owned: boolean, reviewMarkdown: string | null, reviewHasSpoilers: boolean, reviewedAt: string | null, bookId: number, editionId: number | null, userId: number, statusId: number, privacySettingId: number, hasReview: boolean, readCount: number, dateAdded: string, firstStartedReadingDate: string | null, lastReadDate: string | null, updatedAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, userBookReads: Array<{ id: number, progress: number | null, userBookId: number, editionId: number | null, startedAt: string | null, finishedAt: string | null, finishedAtPrecision: number | null, pausedAt: string | null, progressPages: number | null, progressSeconds: number | null, edition: { id: number, pages: number | null, audioSeconds: number | null, readingFormatId: number } | null }> } | null }> };
 
 export type GetActivitiesForUserQueryVariables = Exact<{
   userId: number;
@@ -8080,7 +8080,7 @@ export type GetActivitiesForUserQueryVariables = Exact<{
 }>;
 
 
-export type GetActivitiesForUserQuery = { activities: Array<{ id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null }> };
+export type GetActivitiesForUserQuery = { activities: Array<{ id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null }> };
 
 export type GetActivitiesForBookQueryVariables = Exact<{
   bookId: number;
@@ -8089,7 +8089,7 @@ export type GetActivitiesForBookQueryVariables = Exact<{
 }>;
 
 
-export type GetActivitiesForBookQuery = { activities: Array<{ id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null }> };
+export type GetActivitiesForBookQuery = { activities: Array<{ id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null }> };
 
 export type GetFollowingActivitiesQueryVariables = Exact<{
   userId: number;
@@ -8098,7 +8098,7 @@ export type GetFollowingActivitiesQueryVariables = Exact<{
 }>;
 
 
-export type GetFollowingActivitiesQuery = { activities: Array<{ id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null }> };
+export type GetFollowingActivitiesQuery = { activities: Array<{ id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null }> };
 
 export type GetStatsLibraryQueryVariables = Exact<{
   userId: number;
@@ -8199,6 +8199,7 @@ export const BookDetailFragmentDoc = new TypedDocumentString(`
   releaseDate: release_date
   editionsCount: editions_count
   cachedTags: cached_tags
+  cachedHeaderImage: cached_header_image
   contributions {
     contribution
     author {
@@ -8503,6 +8504,8 @@ export const UserProfileFragmentDoc = new TypedDocumentString(`
   bio
   flair
   cachedImage: cached_image
+  cachedCover: cached_cover
+  cachedGenres: cached_genres
   booksCount: books_count
   followersCount: followers_count
   followedUsersCount: followed_users_count
@@ -8550,6 +8553,8 @@ fragment UserProfile on users {
   bio
   flair
   cachedImage: cached_image
+  cachedCover: cached_cover
+  cachedGenres: cached_genres
   booksCount: books_count
   followersCount: followers_count
   followedUsersCount: followed_users_count
@@ -8577,6 +8582,8 @@ export const MeFragmentDoc = new TypedDocumentString(`
   bio
   flair
   cachedImage: cached_image
+  cachedCover: cached_cover
+  cachedGenres: cached_genres
   booksCount: books_count
   followersCount: followers_count
   followedUsersCount: followed_users_count
@@ -9524,6 +9531,7 @@ fragment BookDetail on books {
   releaseDate: release_date
   editionsCount: editions_count
   cachedTags: cached_tags
+  cachedHeaderImage: cached_header_image
   contributions {
     contribution
     author {
@@ -9580,6 +9588,7 @@ fragment BookDetail on books {
   releaseDate: release_date
   editionsCount: editions_count
   cachedTags: cached_tags
+  cachedHeaderImage: cached_header_image
   contributions {
     contribution
     author {
@@ -10611,6 +10620,8 @@ export const MeDocument = new TypedDocumentString(`
   bio
   flair
   cachedImage: cached_image
+  cachedCover: cached_cover
+  cachedGenres: cached_genres
   booksCount: books_count
   followersCount: followers_count
   followedUsersCount: followed_users_count
@@ -10656,6 +10667,8 @@ export const GetNotificationsDocument = new TypedDocumentString(`
   bio
   flair
   cachedImage: cached_image
+  cachedCover: cached_cover
+  cachedGenres: cached_genres
   booksCount: books_count
   followersCount: followers_count
   followedUsersCount: followed_users_count
@@ -10903,6 +10916,8 @@ export const GetUserDocument = new TypedDocumentString(`
   bio
   flair
   cachedImage: cached_image
+  cachedCover: cached_cover
+  cachedGenres: cached_genres
   booksCount: books_count
   followersCount: followers_count
   followedUsersCount: followed_users_count
@@ -10922,6 +10937,8 @@ export const GetUserByUsernameDocument = new TypedDocumentString(`
   bio
   flair
   cachedImage: cached_image
+  cachedCover: cached_cover
+  cachedGenres: cached_genres
   booksCount: books_count
   followersCount: followers_count
   followedUsersCount: followed_users_count
@@ -10950,6 +10967,8 @@ export const GetFollowersDocument = new TypedDocumentString(`
   bio
   flair
   cachedImage: cached_image
+  cachedCover: cached_cover
+  cachedGenres: cached_genres
   booksCount: books_count
   followersCount: followers_count
   followedUsersCount: followed_users_count
@@ -10978,6 +10997,8 @@ export const GetFollowingDocument = new TypedDocumentString(`
   bio
   flair
   cachedImage: cached_image
+  cachedCover: cached_cover
+  cachedGenres: cached_genres
   booksCount: books_count
   followersCount: followers_count
   followedUsersCount: followed_users_count
@@ -11005,6 +11026,8 @@ export const GetBlockedUsersDocument = new TypedDocumentString(`
   bio
   flair
   cachedImage: cached_image
+  cachedCover: cached_cover
+  cachedGenres: cached_genres
   booksCount: books_count
   followersCount: followers_count
   followedUsersCount: followed_users_count
@@ -11072,6 +11095,8 @@ fragment UserProfile on users {
   bio
   flair
   cachedImage: cached_image
+  cachedCover: cached_cover
+  cachedGenres: cached_genres
   booksCount: books_count
   followersCount: followers_count
   followedUsersCount: followed_users_count
@@ -11128,6 +11153,8 @@ fragment UserProfile on users {
   bio
   flair
   cachedImage: cached_image
+  cachedCover: cached_cover
+  cachedGenres: cached_genres
   booksCount: books_count
   followersCount: followers_count
   followedUsersCount: followed_users_count
@@ -11184,6 +11211,8 @@ fragment UserProfile on users {
   bio
   flair
   cachedImage: cached_image
+  cachedCover: cached_cover
+  cachedGenres: cached_genres
   booksCount: books_count
   followersCount: followers_count
   followedUsersCount: followed_users_count
@@ -11240,6 +11269,8 @@ fragment UserProfile on users {
   bio
   flair
   cachedImage: cached_image
+  cachedCover: cached_cover
+  cachedGenres: cached_genres
   booksCount: books_count
   followersCount: followers_count
   followedUsersCount: followed_users_count

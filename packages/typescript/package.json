@@ -1,6 +1,6 @@
 {
   "name": "@hardcover/sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The official TypeScript client for the Hardcover API: typed resources, rate-limit pacing, and OAuth sign-in that handles the tokens for you.",
   "license": "MIT",
   "keywords": [

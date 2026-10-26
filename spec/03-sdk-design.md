@@ -452,6 +452,9 @@ TypeScript, Swift and Kotlin use camelCase; Python uses snake_case.
 Several fields are `jsonb` and have no schema type:
 
 - `cached_image`, `cached_contributors`, `cached_tags`, `cached_featured_series`
+- `books.cached_header_image`, `books.cached_similar_book_ids`
+- `users.cached_cover`, `users.cached_genres`
+- `vibes.cached_book_ids`
 - `search.results`
 - `activities.data`
 - `reading_journals.metadata`
@@ -469,6 +472,13 @@ Built in TypeScript (2026-10-20): `core/json-columns.ts` holds the four
 `books_count`; `cached_tags` entries are stored camelCase). Every field is
 optional: an empty column arrives as `{}`, and the server may add or drop
 keys. The raw generated types (`BookSummaryFragment`) stay `unknown`.
+
+Added (2026-10-26), with shapes read from the app's own writers and checked on
+prod: `cached_header_image` and `cached_cover` are the same image snapshot as
+`cached_image`; `cached_similar_book_ids` and `cached_book_ids` are id arrays;
+`cached_genres` is `{ tag, tagSlug, count }[]`. `BookDetail` selects the header
+image and `UserProfile` the cover and genres. The similar-book ids (up to 100)
+stay out of the fragments, as vibe book ids do.
 
 ## First consumers
 
@@ -577,7 +587,9 @@ the server's entry carries when the reading actually happened.
 
 - **One monorepo, one tag stream per language** (`typescript-v1.2.0`), using
   release-please with one component per package. The old `sdk/` scaffold's
-  config can be reused.
+  config can be reused. A tag always points at the commit the published
+  package was built from (for npm, the version's `gitHead`), never at a
+  later commit on `main`.
 - **Semver is per language.** A breaking API snapshot change is a major bump in
   every language that exposes the affected surface.
 - **1.0 is no longer gated on the API.** Tokens and OAuth were beta-gated

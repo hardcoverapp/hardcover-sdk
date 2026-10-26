@@ -5,7 +5,17 @@ Changes to `@hardcover/sdk`, newest first. The format follows
 [Semantic Versioning](https://semver.org/). Before 1.0, a minor version (0.2.0)
 may rename or remove things; each one is listed here with what to change.
 
-## Unreleased
+## 0.1.1 - Unreleased
+
+### Added
+
+- More typed JSON columns: `cachedHeaderImage` on books and `cachedCover` on
+  users (both `CachedImage`), `cachedGenres` on users (new `CachedGenre`),
+  and `cachedSimilarBookIds` on books and `cachedBookIds` on vibes
+  (`number[]`).
+- `books.get()` and the other book-detail results now include
+  `cachedHeaderImage`. User profiles, including `me.get()`, now include
+  `cachedCover` and `cachedGenres`.
 
 ### Changed
 

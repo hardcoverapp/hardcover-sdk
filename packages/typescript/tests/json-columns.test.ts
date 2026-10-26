@@ -1,14 +1,19 @@
-// JSON columns (cachedImage, cachedContributors, cachedTags, cachedFeaturedSeries)
-// come back typed, with their contents exactly as stored (spec/03).
+// JSON columns (cachedImage, cachedContributors, cachedTags, cachedFeaturedSeries,
+// cachedHeaderImage, cachedSimilarBookIds, cachedCover, cachedGenres,
+// cachedBookIds) come back typed, with their contents exactly as stored (spec/03).
 import { describe, expect, expectTypeOf, it } from "vitest";
 import type {
   Book,
   BookSummary,
   CachedContributor,
   CachedFeaturedSeries,
+  CachedGenre,
   CachedImage,
   CachedTags,
+  GetVibeBookIdsQuery,
   LibraryListItem,
+  UserProfile,
+  WithJsonColumns,
 } from "../src/index.ts";
 import { ok, setup } from "./helpers.ts";
 
@@ -76,6 +81,15 @@ describe("JSON columns", () => {
     expectTypeOf<BookSummary["cachedContributors"]>().toEqualTypeOf<CachedContributor[]>();
     expectTypeOf<BookSummary["cachedFeaturedSeries"]>().toEqualTypeOf<CachedFeaturedSeries>();
     expectTypeOf<Book["cachedTags"]>().toEqualTypeOf<CachedTags>();
+    expectTypeOf<Book["cachedHeaderImage"]>().toEqualTypeOf<CachedImage>();
+    expectTypeOf<UserProfile["cachedCover"]>().toEqualTypeOf<CachedImage>();
+    expectTypeOf<UserProfile["cachedGenres"]>().toEqualTypeOf<CachedGenre[]>();
+
+    type VibeBookIds = NonNullable<WithJsonColumns<GetVibeBookIdsQuery>["vibes_by_pk"]>;
+    expectTypeOf<VibeBookIds["cachedBookIds"]>().toEqualTypeOf<number[]>();
+
+    // Not in a built-in fragment, but typed for anyone who selects it.
+    expectTypeOf<WithJsonColumns<{ cachedSimilarBookIds: unknown }>["cachedSimilarBookIds"]>().toEqualTypeOf<number[]>();
 
     // Nested inside another type: a library row's book.
     expectTypeOf<LibraryListItem["book"]["cachedImage"]>().toEqualTypeOf<CachedImage>();

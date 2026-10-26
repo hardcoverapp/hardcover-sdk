@@ -64,6 +64,15 @@ export type CachedTags = {
   [category: string]: CachedTag[] | undefined;
 };
 
+/** One of a reader's most-read genres, counted from the books they've read. */
+export interface CachedGenre {
+  tag?: string;
+  tagSlug?: string;
+
+  /** How many of the reader's read books have this genre. */
+  count?: number;
+}
+
 /** A series, as the featured-series column describes it. */
 export interface CachedSeries {
   id?: number;
@@ -91,20 +100,35 @@ export interface CachedFeaturedSeries {
 
 /**
  * Which type each JSON column gets, by field name. The names are the same on
- * every table that has them (books, editions, authors, users).
+ * every table that has them (books, editions, authors, users, vibes).
  */
 interface JsonColumns {
   cachedImage: CachedImage;
   cachedContributors: CachedContributor[];
   cachedTags: CachedTags;
   cachedFeaturedSeries: CachedFeaturedSeries;
+
+  /** A book's wide banner image. `{}` when it has none, which is most books. */
+  cachedHeaderImage: CachedImage;
+
+  /** Ids of books readers of this book also read, most similar first. */
+  cachedSimilarBookIds: number[];
+
+  /** A user's profile banner. */
+  cachedCover: CachedImage;
+
+  /** A user's most-read genres. */
+  cachedGenres: CachedGenre[];
+
+  /** A vibe's matching books, best match first. */
+  cachedBookIds: number[];
 }
 
 // Codegen can only map the `jsonb` scalar as a whole (to `unknown`), so the
 // per-field types are applied on top of its output here.
 /**
- * A generated result type with its JSON columns (`cachedImage`,
- * `cachedContributors`, `cachedTags`, `cachedFeaturedSeries`) typed, at any
+ * A generated result type with its `cached*` JSON columns (`cachedImage`,
+ * `cachedContributors`, `cachedTags`, `cachedFeaturedSeries`, …) typed, at any
  * depth. The shapes are observed, not guaranteed: every field is optional, an
  * empty column arrives as `{}`, and keys stay as stored (some snake_case).
  */

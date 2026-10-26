@@ -5,6 +5,9 @@ fragment UserProfile on users {
   bio
   flair
   cached_image
+  # Profile banner image, and the reader's most-read genres.
+  cached_cover
+  cached_genres
   books_count
   followers_count
   followed_users_count

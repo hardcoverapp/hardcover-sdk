@@ -9,9 +9,9 @@ behavior tests), and each language is a thin layer on top of it. The API
 decides; the SDK passes its answers through, and takes care of what every app
 would otherwise repeat:
 
-- typed resources (`library`, `reads`, `lists`, `journal`, `goals`, `vibes`,
-  `prompts`, `books`, `authors`, `series`, `users`, `activities`, `likes`,
-  `notifications`, `search`) with one consistent shape across them
+- typed resources (`me`, `library`, `reads`, `lists`, `journal`, `goals`,
+  `vibes`, `prompts`, `books`, `authors`, `series`, `users`, `activities`,
+  `likes`, `notifications`, `search`) with one consistent shape across them
 - rate limits: pacing from the API's headers, backoff when other apps share the
   same budget, and opt-in batching of concurrent reads
 - OAuth sign-in (browser with PKCE, device code, OpenID) where the SDK owns the
@@ -29,19 +29,19 @@ would otherwise repeat:
 
 <p align="center"><sub>Real calls, rendered for illustration (the SDK returns JSON). More in <a href="packages/typescript/teasers">packages/typescript/teasers</a>.</sub></p>
 
-**Status: TypeScript, pre-release.** The TypeScript SDK covers what reading apps
-need from the API: the library and reads, lists, journal, goals, vibes and
-prompts, the catalog (books, authors, series, editions, external ids), people
-and feeds, and notifications. A few niche areas come later, and some endpoints
-are left out on purpose (librarian-only catalog edits, operations the gateway
-blocks for tokens); [spec/03](spec/03-sdk-design.md#coverage) lists both. It
-runs in browsers, Node and React Native (Hermes), and signs in with OAuth
-(browser or device code) or a personal access token. It builds as
-`@hardcover/sdk` (ES modules, no dependencies) and isn't
-published to a package registry yet. The first consumers are the
-Hardcover docs site (live examples) and a React Native app. Swift, Kotlin
-(Java-friendly), Python and Ruby follow once the shared layer has proven
-itself.
+**Status: TypeScript, 0.x early release.** `@hardcover/sdk` is
+[on npm](https://www.npmjs.com/package/@hardcover/sdk); its
+[README](packages/typescript/README.md) and the
+[documentation](https://docs.hardcover.app/sdk/typescript/) cover using it.
+It covers what reading apps need from the API: the library and reads, lists,
+journal, goals, vibes and prompts, the catalog (books, authors, series,
+editions, external ids), people and feeds, and notifications. A few niche
+areas come later, and some endpoints are left out on purpose (librarian-only
+catalog edits, operations the gateway blocks for tokens);
+[spec/03](spec/03-sdk-design.md#coverage) lists both. Names may still change
+before 1.0. The first consumers are the Hardcover docs site (live examples)
+and a React Native app. Swift, Kotlin (Java-friendly), Python and Ruby follow
+once the shared layer has proven itself.
 
 ## Language matrix
 
@@ -102,8 +102,14 @@ changing it.
 <!-- MATRIX:END -->
 
 A cell turns ✅ only when that language passes the matching
-[conformance cases](shared/conformance). See
-[spec/05](spec/05-adding-a-language.md).
+[conformance cases](shared/conformance), and a resource row also needs a
+type-checked usage example. See [spec/05](spec/05-adding-a-language.md).
+
+The two partial TypeScript rows: shared fixtures are planned but
+[empty](shared/fixtures/README.md) (mock tests use inline responses for now),
+and React Native passes the Hermes compile and runtime checks
+([spec/04](spec/04-testing.md#react-native-hermes-check)) but hasn't been
+proven in a shipping app yet.
 
 ## Layout
 
@@ -121,7 +127,7 @@ shared/
   fixtures/       recorded, scrubbed API responses for mock clients
 packages/         one directory per language (typescript/ first), plus playground/
   typescript/teasers/  images of real calls, for the README and docs
-scripts/          case-operations, validate-operations, render-matrix
+scripts/          case-operations, validate-operations, render-matrix, snapshot
 spec/             the design
 ```
 
@@ -142,8 +148,12 @@ spec/             the design
 
 ```sh
 pnpm install
+pnpm codegen               # regenerate types after editing shared/operations
+pnpm test                  # mock and conformance tests, every package
+pnpm typecheck             # including the examples
 pnpm validate:operations   # shared/operations vs api-snapshot/schema.graphql
 pnpm matrix                # regenerate the table above
+pnpm snapshot:check        # has the live schema drifted from api-snapshot?
 ```
 
 ## Playground
@@ -165,8 +175,9 @@ Local setup: browsers only see the rate-limit headers if local Hasura runs with
 
 ## Live tests
 
-These are off by default; mocks always come first. To run them against a real server, set a test
-account's token:
+These are off by default; mocks always come first. To run them against a
+real server, set a test account's token in the shell or in a gitignored
+`.env` at the repo root:
 
 ```sh
 cd packages/typescript

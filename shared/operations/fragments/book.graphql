@@ -26,6 +26,8 @@ fragment BookDetail on books {
   release_date
   editions_count
   cached_tags
+  # The page's wide banner, or {} (most books have none).
+  cached_header_image
   contributions {
     contribution
     author {
