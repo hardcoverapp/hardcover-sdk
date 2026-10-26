@@ -7744,6 +7744,13 @@ export type TrendingBookIdsQueryVariables = Exact<{
 
 export type TrendingBookIdsQuery = { books_trending: { ids: Array<number | null> | null, error: string | null } | null };
 
+export type SimilarBookIdsQueryVariables = Exact<{
+  id: number;
+}>;
+
+
+export type SimilarBookIdsQuery = { books_by_pk: { id: number, cachedSimilarBookIds: unknown, cachedSimilarBooksUpdatedAt: string | null } | null };
+
 export type ReleasedBooksQueryVariables = Exact<{
   from: string;
   to: string;
@@ -9734,6 +9741,15 @@ export const TrendingBookIdsDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<TrendingBookIdsQuery, TrendingBookIdsQueryVariables>;
+export const SimilarBookIdsDocument = new TypedDocumentString(`
+    query SimilarBookIds($id: Int!) {
+  books_by_pk(id: $id) {
+    id
+    cachedSimilarBookIds: cached_similar_book_ids
+    cachedSimilarBooksUpdatedAt: cached_similar_books_updated_at
+  }
+}
+    `) as unknown as TypedDocumentString<SimilarBookIdsQuery, SimilarBookIdsQueryVariables>;
 export const ReleasedBooksDocument = new TypedDocumentString(`
     query ReleasedBooks($from: date!, $to: date!, $limit: Int = 25, $offset: Int = 0) {
   books(

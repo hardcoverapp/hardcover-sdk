@@ -109,6 +109,9 @@ read-only production token. The mobile apps come next and will likely hit the sa
     refuses to strip types under `node_modules`. The script links the package
     with `link:`, which resolves outside `node_modules`, so it works today only
     for local consumers. ESM/CJS builds stay first in the next steps.
+    **Done (2026-10-22):** 0.1.0 ships built ES modules and `.d.ts` files
+    (`scripts/build.mjs`), so it runs from `node_modules`; CommonJS on Node
+    22.12+ can `require()` it.
 29. **A cold burst without `batch` fails.** 25 concurrent `books.get` calls
     sent before any rate-limit headers arrived all went out at once, and the
     resulting 429s outlasted `maxRetries` (`RateLimitError`, burst window,
@@ -142,6 +145,8 @@ read-only production token. The mobile apps come next and will likely hit the sa
     **Types done (2026-10-20):** the four `cached_*` columns are typed on every
     public type (spec/03, Types for JSON columns), so `b.cachedFeaturedSeries
     .series?.name` needs no cast. Helpers are still open.
+    **More types (2026-10-26):** `cached_header_image`, `cached_cover`,
+    `cached_genres`, `cached_similar_book_ids` and `cached_book_ids` too.
 
 ### Open: for the API project
 

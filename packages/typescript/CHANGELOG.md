@@ -13,6 +13,9 @@ may rename or remove things; each one is listed here with what to change.
   users (both `CachedImage`), `cachedGenres` on users (new `CachedGenre`),
   and `cachedSimilarBookIds` on books and `cachedBookIds` on vibes
   (`number[]`).
+- `books.similar(bookId, { limit, offset })`: the site's "Similar books",
+  most similar first, up to 100. `updatedAt` is null until the site has built
+  the book's list.
 - `books.get()` and the other book-detail results now include
   `cachedHeaderImage`. User profiles, including `me.get()`, now include
   `cachedCover` and `cachedGenres`.

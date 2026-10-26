@@ -49,6 +49,17 @@ query TrendingBookIds($duration: TrendingDuration = month, $limit: Int = 25, $of
   }
 }
 
+# Up to 100 ids from Hardcover's recommendations, most similar first; resolve
+# with GetBooks. The site builds the list when someone opens the book's page,
+# so it can be empty, and refreshes it monthly.
+query SimilarBookIds($id: Int!) {
+  books_by_pk(id: $id) {
+    id
+    cached_similar_book_ids
+    cached_similar_books_updated_at
+  }
+}
+
 # Books first released in a date range (inclusive), most readers first.
 # Matches the site's release calendar: active books only, by the book's own
 # release date, so a reissue or translation of an older book isn't "new".

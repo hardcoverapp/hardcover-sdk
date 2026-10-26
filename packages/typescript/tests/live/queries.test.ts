@@ -64,6 +64,12 @@ describeLive(`every shared query (${target})`, () => {
     expect(editions.some((e) => e.isbn13 === isbn)).toBe(true);
   });
 
+  it("SimilarBookIds", async () => {
+    const { books_by_pk } = await client.request(operations.SimilarBookIds, { id: book.id });
+    expect(books_by_pk?.id).toBe(book.id);
+    expect(Array.isArray(books_by_pk?.cachedSimilarBookIds)).toBe(true);
+  });
+
   it("TrendingBookIds", async () => {
     const { books_trending } = await client.request(operations.TrendingBookIds, { limit: 5 });
     expect(books_trending?.error ?? null).toBeNull();

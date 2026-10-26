@@ -478,7 +478,8 @@ prod: `cached_header_image` and `cached_cover` are the same image snapshot as
 `cached_image`; `cached_similar_book_ids` and `cached_book_ids` are id arrays;
 `cached_genres` is `{ tag, tagSlug, count }[]`. `BookDetail` selects the header
 image and `UserProfile` the cover and genres. The similar-book ids (up to 100)
-stay out of the fragments, as vibe book ids do.
+stay out of the fragments, as vibe book ids do; `books.similar` reads them with
+their own query (`SimilarBookIds`).
 
 ## First consumers
 
@@ -497,7 +498,7 @@ Each method notes its operation, its required scope and any extra requests.
 | Resource | Methods | Operations |
 |---|---|---|
 | `me` | `get()` (cached per client) | Me |
-| `books` | `get(id)`, `getBySlug(slug)`, `getMany(ids)` (in the order given; missing ids skipped), `editions(bookId, page)`, `findByIsbn(isbns)` (exact ISBN-13/10, spaces and hyphens fine), `edition(id)` (with its book), `friends(bookId)` (library entries of people you follow, with reviews; never private notes), `findByExternalIds(platform, ids)` (books other services know by their ids, e.g. `Platform.Goodreads`; one request for the list), `trending({ duration, limit, offset })` (2 requests: ids, then books, in trending order; `limit` capped at the API's 100), `released({ from, to, limit, offset })` (first released in the range, most readers first; reissues excluded). Read-only; catalog writes need librarian roles and come later | GetBook, GetBookBySlug, GetBooks, GetEditionsForBook, FindEditionsByIsbn, GetEdition, FindBookMappings, GetFriendsForBook, TrendingBookIds, ReleasedBooks |
+| `books` | `get(id)`, `getBySlug(slug)`, `getMany(ids)` (in the order given; missing ids skipped), `editions(bookId, page)`, `findByIsbn(isbns)` (exact ISBN-13/10, spaces and hyphens fine), `edition(id)` (with its book), `friends(bookId)` (library entries of people you follow, with reviews; never private notes), `findByExternalIds(platform, ids)` (books other services know by their ids, e.g. `Platform.Goodreads`; one request for the list), `trending({ duration, limit, offset })` (2 requests: ids, then books, in trending order; `limit` capped at the API's 100), `released({ from, to, limit, offset })` (first released in the range, most readers first; reissues excluded), `similar(bookId, page)` (the site's similar books from `cached_similar_book_ids`, up to 100; 2 requests; `updatedAt` null until the site builds the list). Read-only; catalog writes need librarian roles and come later | GetBook, GetBookBySlug, GetBooks, GetEditionsForBook, FindEditionsByIsbn, GetEdition, FindBookMappings, GetFriendsForBook, TrendingBookIds, ReleasedBooks, SimilarBookIds |
 | `authors` | `get(id)`, `getBySlug(slug)` (with `canonicalId` for merged duplicates), `books(authorId, page)` (each book once, most readers first, active books only), `series(authorId)` (by name) | GetAuthor, GetAuthorBySlug, GetAuthorBooks, GetAuthorSeries |
 | `series` | `get(id)`, `getBySlug(slug)`, `books(seriesId, page)` (every entry in position order, 50 per page by default, with `position`, `details`, `compilation`, `featured`; the site's reading order is server-side only, spec/06) | GetSeries, GetSeriesBySlug, GetSeriesBooks |
 | `users` | `get(id)`, `getByUsername(username)` (case-insensitive, leading @ fine), `followers(userId, page)`, `following(userId, page)`, `follow(userId)`, `unfollow(userId)`, `removeFollower(userId)` (someone who follows you), `block(userId, { type: BlockType.Full \| Invites })` (a full block ends follows both ways), `unblock(userId)` (finds the block ids, false if none), `blocked()` | GetUser, GetUserByUsername, GetFollowers, GetFollowing, FollowUser, UnfollowUser, BlockUser, UnblockUser, GetBlockedUsers |

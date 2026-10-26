@@ -561,6 +561,12 @@ export const operations = {
    */
   Search: documents.SearchDocument,
   /**
+   * Query `SimilarBookIds` on `books_by_pk`.
+   *
+   * Scopes: one of `read:catalog`, `read:catalog:data`, `read:catalog:search`.
+   */
+  SimilarBookIds: documents.SimilarBookIdsDocument,
+  /**
    * Query `TrendingBookIds` on `books_trending`.
    *
    * Scopes: one of `read:catalog`, `read:catalog:data`, `read:catalog:search`.

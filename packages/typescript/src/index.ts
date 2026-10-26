@@ -78,6 +78,7 @@ export {
   type ExternalMatch,
   type FriendEntry,
   type ReleasedOptions,
+  type SimilarBooks,
   type TrendingOptions,
 } from "./resources/books.ts";
 export { JournalResource, type JournalEntry, type JournalEntryInput, type JournalTag } from "./resources/journal.ts";

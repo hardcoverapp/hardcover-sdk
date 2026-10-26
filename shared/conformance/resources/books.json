@@ -483,6 +483,96 @@
     }
   },
   {
+    "id": "books/similar-in-ranked-order",
+    "method": "books.similar",
+    "args": [7, { "limit": 3 }],
+    "responses": [
+      {
+        "status": 200,
+        "body": {
+          "data": {
+            "books_by_pk": {
+              "id": 7,
+              "cached_similar_book_ids": [30, 10, 20, 40],
+              "cached_similar_books_updated_at": "2026-10-07T01:00:00"
+            }
+          }
+        }
+      },
+      { "status": 200, "body": { "data": { "books": [{ "id": 10 }, { "id": 20 }, { "id": 30 }] } } }
+    ],
+    "expect": {
+      "requests": [
+        { "operationName": "SimilarBookIds", "variables": { "id": 7 } },
+        { "operationName": "GetBooks", "variables": { "ids": [30, 10, 20] } }
+      ],
+      "result": {
+        "items": [{ "id": 30 }, { "id": 10 }, { "id": 20 }],
+        "limit": 3,
+        "offset": 0,
+        "hasMore": true,
+        "updatedAt": "2026-10-07T01:00:00"
+      }
+    }
+  },
+  {
+    "id": "books/similar-last-page",
+    "method": "books.similar",
+    "args": [7, { "limit": 3, "offset": 3 }],
+    "responses": [
+      {
+        "status": 200,
+        "body": {
+          "data": {
+            "books_by_pk": {
+              "id": 7,
+              "cached_similar_book_ids": [30, 10, 20, 40],
+              "cached_similar_books_updated_at": "2026-10-07T01:00:00"
+            }
+          }
+        }
+      },
+      { "status": 200, "body": { "data": { "books": [{ "id": 40 }] } } }
+    ],
+    "expect": {
+      "requests": [
+        { "operationName": "SimilarBookIds", "variables": { "id": 7 } },
+        { "operationName": "GetBooks", "variables": { "ids": [40] } }
+      ],
+      "result": { "items": [{ "id": 40 }], "limit": 3, "offset": 3, "hasMore": false, "updatedAt": "2026-10-07T01:00:00" }
+    }
+  },
+  {
+    "id": "books/similar-not-built-yet",
+    "method": "books.similar",
+    "args": [7],
+    "responses": [
+      {
+        "status": 200,
+        "body": {
+          "data": {
+            "books_by_pk": { "id": 7, "cached_similar_book_ids": [], "cached_similar_books_updated_at": null }
+          }
+        }
+      }
+    ],
+    "expect": {
+      "requests": [{ "operationName": "SimilarBookIds", "variables": { "id": 7 } }],
+      "result": { "items": [], "limit": 25, "offset": 0, "hasMore": false, "updatedAt": null }
+    }
+  },
+  {
+    "id": "books/similar-missing-book",
+    "method": "books.similar",
+    "args": [7],
+    "responses": [{ "status": 200, "body": { "data": { "books_by_pk": null } } }],
+    "expect": {
+      "requests": [{ "operationName": "SimilarBookIds", "variables": { "id": 7 } }],
+      "error": "NotFoundError",
+      "fields": { "resource": "book", "id": 7 }
+    }
+  },
+  {
     "id": "books/friends-skips-empty-rows",
     "method": "books.friends",
     "args": [100],

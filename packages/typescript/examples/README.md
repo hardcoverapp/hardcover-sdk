@@ -17,7 +17,7 @@ live examples you can run with your own token.
 | [social.ts](social.ts) | Profiles, follows, your feed, friends who read a book, likes, blocks |
 | [notifications.ts](notifications.ts) | The notification bell: unread count, list, mark read |
 | [search.ts](search.ts) | Searching every type, tuning with the API's options |
-| [books.ts](books.ts) | Book details, editions, exact ISBN lookup, trending (one per series), new releases, ordered batches |
+| [books.ts](books.ts) | Book details, editions, similar books, exact ISBN lookup, trending (one per series), new releases, ordered batches |
 | [year-in-review.ts](year-in-review.ts) | A year of finished reads with their books, logging and fixing a past read, owned editions |
 | [stats.ts](stats.ts) | Reading stats for a year, a month or life: totals, ratings, formats, genres, authors, books per month |
 | [sync-library.ts](sync-library.ts) | Incremental library sync with a cursor, and finding removals |

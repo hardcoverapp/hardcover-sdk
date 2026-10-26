@@ -111,7 +111,10 @@ interface JsonColumns {
   /** A book's wide banner image. `{}` when it has none, which is most books. */
   cachedHeaderImage: CachedImage;
 
-  /** Ids of books readers of this book also read, most similar first. */
+  /**
+   * Up to 100 ids from Hardcover's recommendations, most similar first. `[]`
+   * until the site has built the list (see `books.similar`).
+   */
   cachedSimilarBookIds: number[];
 
   /** A user's profile banner. */

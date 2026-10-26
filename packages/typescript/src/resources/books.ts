@@ -1,4 +1,5 @@
 import type { HardcoverClient } from "../core/client.ts";
+import { NotFoundError } from "../core/errors.ts";
 import { cleanIsbn } from "../core/isbn.ts";
 import type { WithJsonColumns } from "../core/json-columns.ts";
 import type {
@@ -38,6 +39,16 @@ export interface ReleasedOptions extends PageOptions {
 
   /** Last day, inclusive (YYYY-MM-DD). */
   to: string;
+}
+
+/** Similar books, plus when the list was built. */
+export interface SimilarBooks extends Page<BookSummary> {
+  /**
+   * When Hardcover last built this book's list (ISO timestamp), or null if it
+   * hasn't yet. The site builds it when someone opens the book's page and
+   * refreshes it monthly.
+   */
+  updatedAt: string | null;
 }
 
 export interface TrendingOptions extends PageOptions {
@@ -144,6 +155,28 @@ export class BooksResource {
     const { book_mappings } = await this.client.request(operations.FindBookMappings, { platformId: platform, externalIds });
 
     return book_mappings;
+  }
+
+  /**
+   * Books like this one, most similar first, from the same recommendations as
+   * the "Similar books" section on hardcover.app. Up to 100 in all; page
+   * through them with `limit` and `offset`. Two requests when there are books
+   * to show. Empty until the site has built the book's list (`updatedAt` is
+   * null then).
+   * Scopes: `read:catalog`.
+   */
+  async similar(bookId: number, { limit: requested = DEFAULT_LIMIT, offset = 0 }: PageOptions = {}): Promise<SimilarBooks> {
+    const limit = capped("books", requested);
+    // The book holds its ranked ids; the books themselves are a second read.
+    const { books_by_pk: book } = await this.client.request(operations.SimilarBookIds, { id: bookId });
+    if (!book) throw new NotFoundError("book", bookId);
+
+    const ids = nonNull(book.cachedSimilarBookIds as (number | null)[] | null);
+    const updatedAt = book.cachedSimilarBooksUpdatedAt ?? null;
+
+    const books = await this.getMany(ids.slice(offset, offset + limit));
+
+    return { ...toPage(books, limit, offset), hasMore: offset + limit < ids.length, updatedAt };
   }
 
   /**
