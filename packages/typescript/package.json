@@ -14,10 +14,10 @@
   "homepage": "https://docs.hardcover.app/sdk/typescript/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hardcoverapp/community-sdk.git",
+    "url": "git+https://github.com/hardcoverapp/hardcover-sdk.git",
     "directory": "packages/typescript"
   },
-  "bugs": "https://github.com/hardcoverapp/community-sdk/issues",
+  "bugs": "https://github.com/hardcoverapp/hardcover-sdk/issues",
   "type": "module",
   "types": "./dist/index.d.ts",
   "exports": {

@@ -11,7 +11,7 @@ own token.
 
 > **0.x: early release.** Everything works against the live API. Names may
 > still change before 1.0 based on what people building with it tell us;
-> [open an issue](https://github.com/hardcoverapp/community-sdk/issues) with
+> [open an issue](https://github.com/hardcoverapp/hardcover-sdk/issues) with
 > anything that gets in your way.
 
 ```sh
@@ -138,5 +138,5 @@ lists every option, enum and error.
 - [Guides](https://docs.hardcover.app/sdk/typescript/0.1/) for whole tasks,
   and a page per resource with every method and a live example
 - [Changelog](https://docs.hardcover.app/sdk/typescript/changelog/)
-- [The design and the API it wraps](https://github.com/hardcoverapp/community-sdk/tree/main/spec)
-- [Issues](https://github.com/hardcoverapp/community-sdk/issues)
+- [The design and the API it wraps](https://github.com/hardcoverapp/hardcover-sdk/tree/main/spec)
+- [Issues](https://github.com/hardcoverapp/hardcover-sdk/issues)

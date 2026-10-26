@@ -246,7 +246,9 @@ read-only production token. The mobile apps come next and will likely hit the sa
 
 11. **Official or community?** Decided 2026-10-07: official, built for the
     community to use and contribute to. The repo is
-    `github.com/hardcoverapp/community-sdk` (private for now). The npm org
+    `github.com/hardcoverapp/hardcover-sdk` (renamed from `community-sdk`
+    2026-10-26; 0.1.0's package metadata still names the old one, which
+    GitHub redirects). The npm org
     `@hardcover` is claimed (2026-10-22, 2FA required) and the TypeScript
     package builds as `@hardcover/sdk`; the first publish is a staged
     package, not a live release. License decided 2026-10-22: **MIT**

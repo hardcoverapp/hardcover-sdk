@@ -22,6 +22,9 @@ may rename or remove things; each one is listed here with what to change.
 
 ### Changed
 
+- The repository moved to
+  [hardcoverapp/hardcover-sdk](https://github.com/hardcoverapp/hardcover-sdk)
+  (it was `community-sdk`); the package's links point there.
 - The README and the package's homepage now link to the
   [documentation](https://docs.hardcover.app/sdk/typescript/) rather than the
   repository.
