@@ -296,8 +296,10 @@ function authors(books: Read[], isPrimary: (c: CachedContributor) => boolean): A
     .sort((a, b) => b.books - a.books);
 }
 
+// Contributions here read both key styles: StatsData may come from
+// `fetchStatsData` (both) or be built by hand from stored data (snake_case only).
 function isTranslator(contribution: CachedContributor): boolean {
-  const role = contribution.contributor_role_name ?? contribution.contribution ?? "";
+  const role = contribution.contributorRoleName ?? contribution.contributor_role_name ?? contribution.contribution ?? "";
 
   return role.toLowerCase() === rules.authors.translatorRole;
 }
@@ -315,13 +317,13 @@ function primaryResolver(roles: ContributorRoles) {
   return (contribution: CachedContributor): boolean => {
     if (typeof contribution.primary === "boolean") return contribution.primary;
 
-    const roleId = contribution.contributor_role_id;
+    const roleId = contribution.contributorRoleId ?? contribution.contributor_role_id;
     if (roleId === null || roleId === undefined) {
       const text = (contribution.contribution ?? "").trim().toLowerCase();
       return text === "" || (rules.authors.legacyPrimaryText as readonly string[]).includes(text);
     }
 
-    const override = overrides.get(`${roleId}:${contribution.contributor_specialization_id ?? null}`);
+    const override = overrides.get(`${roleId}:${contribution.contributorSpecializationId ?? contribution.contributor_specialization_id ?? null}`);
     if (override !== undefined) return override;
 
     return byRole.get(roleId) ?? false;

@@ -12,6 +12,28 @@ export interface SearchImage {
   height?: number;
 }
 
+/** The series the site features for a book, as on `cachedFeaturedSeries`. `{}` when it has none. */
+export interface SearchFeaturedSeries {
+  id?: number;
+  series?: {
+    id?: number;
+    name?: string;
+    slug?: string;
+    booksCount?: number;
+    primaryBooksCount?: number;
+  };
+
+  /** The book's number in the series. */
+  position?: number;
+
+  /** The position as written, e.g. "1" or "1-3". */
+  details?: string;
+
+  featured?: boolean;
+  collection?: boolean;
+  unreleased?: boolean;
+}
+
 export interface SearchUserRef {
   id?: number;
   username?: string;
@@ -41,7 +63,7 @@ export interface BookHit {
   isbns?: string[];
   seriesIds?: number[];
   seriesNames?: string[];
-  featuredSeries?: Record<string, unknown>;
+  featuredSeries?: SearchFeaturedSeries;
   featuredSeriesPosition?: number;
   genres?: string[];
   moods?: string[];

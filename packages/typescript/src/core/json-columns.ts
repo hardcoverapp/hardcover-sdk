@@ -2,7 +2,8 @@
 // JSON columns).
 //
 // The shapes are observed from the API, not guaranteed:
-// - keys stay exactly as stored (so some are snake_case, like `color_name`),
+// - keys stay as stored, except a few snake_case ones (listed at the end of
+//   this file) that also come back in camelCase, the stored key deprecated,
 // - an empty column arrives as `{}`, not `null`,
 // - the server can add or drop keys at any time.
 //
@@ -17,6 +18,10 @@ export interface CachedImage {
 
   /** Dominant color as a hex string, e.g. "#ddd8d7". */
   color?: string;
+
+  /** The dominant color's name, e.g. "Silver". */
+  colorName?: string;
+  /** @deprecated Use `colorName`. Removed in a future release. */
   color_name?: string;
 }
 
@@ -39,13 +44,26 @@ export interface CachedContributor {
   primary?: boolean;
 
   // The role behind `contribution`, with its description.
-  contributor_role_id?: number | null;
-  contributor_role_name?: string | null;
-  contributor_role_blurb?: string | null;
+  contributorRoleId?: number | null;
+  contributorRoleName?: string | null;
+  contributorRoleBlurb?: string | null;
 
   // An optional narrower role, e.g. a kind of translator.
+  contributorSpecializationId?: number | null;
+  contributorSpecializationName?: string | null;
+  contributorSpecializationBlurb?: string | null;
+
+  /** @deprecated Use `contributorRoleId`. Removed in a future release. */
+  contributor_role_id?: number | null;
+  /** @deprecated Use `contributorRoleName`. Removed in a future release. */
+  contributor_role_name?: string | null;
+  /** @deprecated Use `contributorRoleBlurb`. Removed in a future release. */
+  contributor_role_blurb?: string | null;
+  /** @deprecated Use `contributorSpecializationId`. Removed in a future release. */
   contributor_specialization_id?: number | null;
+  /** @deprecated Use `contributorSpecializationName`. Removed in a future release. */
   contributor_specialization_name?: string | null;
+  /** @deprecated Use `contributorSpecializationBlurb`. Removed in a future release. */
   contributor_specialization_blurb?: string | null;
 }
 
@@ -78,7 +96,13 @@ export interface CachedSeries {
   id?: number;
   name?: string;
   slug?: string;
+  booksCount?: number;
+
+  /** Books in the main numbered run, leaving out novellas and extras. */
+  primaryBooksCount?: number | null;
+  /** @deprecated Use `booksCount`. Removed in a future release. */
   books_count?: number;
+  /** @deprecated Use `primaryBooksCount`. Removed in a future release. */
   primary_books_count?: number | null;
 }
 
@@ -98,6 +122,12 @@ export interface CachedFeaturedSeries {
   unreleased?: boolean;
 }
 
+/** How many ratings a book has at one star value (half stars included). */
+export interface RatingCount {
+  rating?: number;
+  count?: number;
+}
+
 /**
  * Which type each JSON column gets, by field name. The names are the same on
  * every table that has them (books, editions, authors, users, vibes).
@@ -110,6 +140,9 @@ interface JsonColumns {
 
   /** A book's wide banner image. `{}` when it has none, which is most books. */
   cachedHeaderImage: CachedImage;
+
+  /** A book's ratings per star value, lowest first, for a histogram. `[]` when it has none. */
+  ratingsDistribution: RatingCount[];
 
   /**
    * Up to 100 ids from Hardcover's recommendations, most similar first. `[]`
@@ -133,7 +166,8 @@ interface JsonColumns {
  * A generated result type with its `cached*` JSON columns (`cachedImage`,
  * `cachedContributors`, `cachedTags`, `cachedFeaturedSeries`, …) typed, at any
  * depth. The shapes are observed, not guaranteed: every field is optional, an
- * empty column arrives as `{}`, and keys stay as stored (some snake_case).
+ * empty column arrives as `{}`, and keys stay as stored (plus the camelCase
+ * copies `withIdiomaticKeys` adds).
  */
 export type WithJsonColumns<T> =
   // A list: type each item.
@@ -149,3 +183,78 @@ export type WithJsonColumns<T> =
 type TypedField<Field, Value> = Field extends keyof JsonColumns
   ? JsonColumns[Field]
   : WithJsonColumns<Value>;
+
+// Idiomatic keys (spec/03, Casing). A few JSON column types store snake_case
+// keys. The SDK adds a camelCase copy of each, mapped explicitly per type, and
+// keeps the stored key as a deprecated alias until a later release removes it.
+// Every other key, and every other column, is left exactly as stored.
+
+const imageKeys = { color_name: "colorName" };
+
+const contributorKeys = {
+  contributor_role_id: "contributorRoleId",
+  contributor_role_name: "contributorRoleName",
+  contributor_role_blurb: "contributorRoleBlurb",
+  contributor_specialization_id: "contributorSpecializationId",
+  contributor_specialization_name: "contributorSpecializationName",
+  contributor_specialization_blurb: "contributorSpecializationBlurb",
+};
+
+const seriesKeys = { books_count: "booksCount", primary_books_count: "primaryBooksCount" };
+
+type Json = Record<string, unknown>;
+
+function isObject(value: unknown): value is Json {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function copyKeys(target: unknown, keys: Record<string, string>): void {
+  if (!isObject(target)) return;
+
+  for (const [stored, idiomatic] of Object.entries(keys)) {
+    if (stored in target && !(idiomatic in target)) target[idiomatic] = target[stored];
+  }
+}
+
+function fixImage(image: unknown): void {
+  copyKeys(image, imageKeys);
+}
+
+function fixContributors(contributors: unknown): void {
+  if (!Array.isArray(contributors)) return;
+
+  for (const contributor of contributors) {
+    copyKeys(contributor, contributorKeys);
+    if (isObject(contributor) && isObject(contributor.author)) fixImage(contributor.author.image);
+  }
+}
+
+function fixFeaturedSeries(featured: unknown): void {
+  if (isObject(featured)) copyKeys(featured.series, seriesKeys);
+}
+
+const columnFixes: Record<string, (column: unknown) => void> = {
+  cachedImage: fixImage,
+  cachedHeaderImage: fixImage,
+  cachedCover: fixImage,
+  cachedContributors: fixContributors,
+  cachedFeaturedSeries: fixFeaturedSeries,
+};
+
+/**
+ * Adds the camelCase copies of snake_case keys inside JSON columns, in place,
+ * anywhere in a response. `request()` runs it on every result.
+ */
+export function withIdiomaticKeys<T>(value: T): T {
+  if (Array.isArray(value)) {
+    for (const item of value) withIdiomaticKeys(item);
+  } else if (isObject(value)) {
+    for (const [field, inner] of Object.entries(value)) {
+      const fix = columnFixes[field];
+      if (fix) fix(inner);
+      else withIdiomaticKeys(inner);
+    }
+  }
+
+  return value;
+}

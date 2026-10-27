@@ -28,6 +28,9 @@ fragment BookDetail on books {
   cached_tags
   # The page's wide banner, or {} (most books have none).
   cached_header_image
+  # How many ratings at each star value, for a histogram: [{ rating, count }],
+  # or [] when the book has no ratings.
+  ratings_distribution
   contributions {
     contribution
     author {

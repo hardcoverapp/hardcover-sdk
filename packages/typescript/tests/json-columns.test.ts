@@ -11,10 +11,12 @@ import type {
   CachedImage,
   CachedTags,
   GetVibeBookIdsQuery,
+  RatingCount,
   LibraryListItem,
   UserProfile,
   WithJsonColumns,
 } from "../src/index.ts";
+import { operations } from "../src/index.ts";
 import { ok, setup } from "./helpers.ts";
 
 // Shapes as the API returned them for Red Rising (2026-10-20).
@@ -84,6 +86,7 @@ describe("JSON columns", () => {
     expectTypeOf<Book["cachedHeaderImage"]>().toEqualTypeOf<CachedImage>();
     expectTypeOf<UserProfile["cachedCover"]>().toEqualTypeOf<CachedImage>();
     expectTypeOf<UserProfile["cachedGenres"]>().toEqualTypeOf<CachedGenre[]>();
+    expectTypeOf<Book["ratingsDistribution"]>().toEqualTypeOf<RatingCount[]>();
 
     type VibeBookIds = NonNullable<WithJsonColumns<GetVibeBookIdsQuery>["vibes_by_pk"]>;
     expectTypeOf<VibeBookIds["cachedBookIds"]>().toEqualTypeOf<number[]>();
@@ -104,10 +107,9 @@ describe("JSON columns", () => {
     const { items } = await client.books.trending({ duration: "week", limit: 2 });
     const [first, second] = items;
 
-    // No casts needed, and the stored keys (color_name, books_count) are untouched.
+    // No casts needed.
     expect(first?.cachedFeaturedSeries.series?.name).toBe("Red Rising Saga");
     expect(first?.cachedFeaturedSeries.position).toBe(1);
-    expect(first?.cachedImage.color_name).toBe("Silver");
 
     const primary = first?.cachedContributors.find((contributor) => contributor.primary);
     expect(primary?.author?.name).toBe("Pierce Brown");
@@ -115,5 +117,45 @@ describe("JSON columns", () => {
     // Empty columns are `{}`, so their fields read as undefined.
     expect(second?.cachedImage.url).toBeUndefined();
     expect(second?.cachedFeaturedSeries.series).toBeUndefined();
+  });
+
+  it("add camelCase copies of snake_case keys, keeping the stored ones", async () => {
+    const withCredit = {
+      ...redRising,
+      cachedContributors: [
+        {
+          author: { id: 232665, name: "Pierce Brown", image: { url: "https://example.com/a.jpg", color_name: "Pink" } },
+          contribution: "Author",
+          contributor_role_id: 1,
+          contributor_role_name: "Author",
+          contributor_role_blurb: "",
+          contributor_specialization_id: null,
+          contributor_specialization_name: null,
+          contributor_specialization_blurb: null,
+          primary: true,
+        },
+      ],
+    };
+    const { client } = setup(ok({ books_by_pk: { ...withCredit, cachedHeaderImage: {} } }));
+
+    const { books_by_pk: book } = await client.request(operations.GetBook, { id: 427473 });
+    const [credit] = book?.cachedContributors ?? [];
+
+    expect(book?.cachedImage.colorName).toBe("Silver");
+    expect(book?.cachedFeaturedSeries.series?.booksCount).toBe(16);
+    expect(book?.cachedFeaturedSeries.series?.primaryBooksCount).toBe(6);
+    expect(credit?.contributorRoleId).toBe(1);
+    expect(credit?.contributorRoleName).toBe("Author");
+    expect(credit?.contributorRoleBlurb).toBe("");
+    expect(credit?.contributorSpecializationId).toBeNull();
+    expect(credit?.author?.image?.colorName).toBe("Pink");
+
+    // Deprecated, kept until a later release.
+    expect(book?.cachedImage.color_name).toBe("Silver");
+    expect(book?.cachedFeaturedSeries.series?.books_count).toBe(16);
+    expect(credit?.contributor_role_id).toBe(1);
+
+    // Keys a column didn't have stay absent.
+    expect("colorName" in (book?.cachedHeaderImage ?? {})).toBe(false);
   });
 });

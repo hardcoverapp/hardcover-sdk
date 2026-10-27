@@ -435,7 +435,13 @@ TypeScript, Swift and Kotlin use camelCase; Python uses snake_case.
   rewrite, so one fixture set serves every language.
 - **JSON column contents** keep their stored keys. Hand-written types for
   `cached_image` and similar may expose idiomatic names, but that mapping is
-  explicit per type, never a blanket conversion.
+  explicit per type, never a blanket conversion. TypeScript does this for the
+  stored snake_case keys in images (`color_name`), contributors
+  (`contributor_role_*`, `contributor_specialization_*`) and a featured
+  series (`books_count`, `primary_books_count`) (decided 2026-10-27, 0.1.1):
+  it adds the camelCase copy and keeps the stored key, deprecated, until a
+  later minor release removes it. The same data then reads the same in
+  `cached_*` columns and in search hits.
 - **Exception: search hits.** Search documents come from the index as JSON
   with snake_case keys and string ids. Their keys are index field names, never
   user content, so the SDK converts them all to the language's casing and ids
@@ -468,8 +474,8 @@ observed, not guaranteed". Everything else stays as untyped JSON.
 Built in TypeScript (2026-10-20): `core/json-columns.ts` holds the four
 `cached_*` types and maps them by field name onto every response that
 `request()` returns and every public type (`BookSummary`, `LibraryListItem`,
-…), at any depth. Contents keep their stored keys (`color_name`,
-`books_count`; `cached_tags` entries are stored camelCase). Every field is
+…), at any depth. Contents keep their stored keys (`cached_tags` entries are
+stored camelCase), plus the camelCase copies described under Casing. Every field is
 optional: an empty column arrives as `{}`, and the server may add or drop
 keys. The raw generated types (`BookSummaryFragment`) stay `unknown`.
 
@@ -480,6 +486,11 @@ prod: `cached_header_image` and `cached_cover` are the same image snapshot as
 image and `UserProfile` the cover and genres. The similar-book ids (up to 100)
 stay out of the fragments, as vibe book ids do; `books.similar` reads them with
 their own query (`SimilarBookIds`).
+
+Added (2026-10-27): `books.ratings_distribution` is typed `RatingCount[]`
+(`{ rating, count }`, `[]` when a book has no ratings; checked locally) and
+selected by `BookDetail`. `UserProfile` selects `users.admin` (staff), readable
+with the same scopes as the rest of the profile.
 
 ## First consumers
 

@@ -12,6 +12,8 @@ fragment UserProfile on users {
   followers_count
   followed_users_count
   pro
+  # Hardcover staff (the site's "Team" badge).
+  admin
   created_at
 }
 

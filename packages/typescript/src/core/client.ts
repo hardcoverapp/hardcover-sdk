@@ -22,7 +22,7 @@ import { VibesResource } from "../resources/vibes.ts";
 import { Allowance } from "./allowance.ts";
 import { requestCost } from "./cost.ts";
 import { AuthenticationError, NetworkError, RateLimitError, ServerError, TimeoutError } from "./errors.ts";
-import type { WithJsonColumns } from "./json-columns.ts";
+import { withIdiomaticKeys, type WithJsonColumns } from "./json-columns.ts";
 import { RequestPlanner } from "./planner.ts";
 import type { RateLimitState } from "./rate-limit.ts";
 import { classify, parseBody, toData, type SendResult } from "./responses.ts";
@@ -336,10 +336,12 @@ export class HardcoverClient {
     const info = operationInfo(document);
     const send = () => this.#execute(query, variables, info);
 
-    if (!this.#planner) return send() as Result;
-    if (info.kind === "mutation") return this.#planner.mutation(send) as Result;
+    let result: Promise<unknown>;
+    if (!this.#planner) result = send();
+    else if (info.kind === "mutation") result = this.#planner.mutation(send);
+    else result = this.#planner.read(query, variables, info);
 
-    return this.#planner.read(query, variables, info) as Result;
+    return result.then(withIdiomaticKeys) as Result;
   }
 
   /** Escape hatch: any query the token's scopes allow, with the same auth, retries and errors. */

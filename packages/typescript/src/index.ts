@@ -11,6 +11,7 @@ export type {
   CachedSeries,
   CachedTag,
   CachedTags,
+  RatingCount,
   WithJsonColumns,
 } from "./core/json-columns.ts";
 export { fetchTransport, TransportFailure, type HttpRequest, type HttpResponse, type Transport } from "./core/transport.ts";

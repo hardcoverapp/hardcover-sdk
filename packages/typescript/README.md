@@ -124,7 +124,7 @@ To compare periods without fetching again, call `fetchStatsData(hc)` once and
   never sent twice.
 - **JSON columns.** Columns the API only knows as JSON come back typed, such
   as `book.cachedImage.color` or `book.cachedFeaturedSeries.position`. Keys
-  stay as stored (`color_name`), and an empty column is `{}`.
+  are camelCase (`colorName`), and an empty column is `{}`.
 - **Testing.** `MockTransport` from `@hardcover/sdk/testing` drives a real
   client with canned responses.
 

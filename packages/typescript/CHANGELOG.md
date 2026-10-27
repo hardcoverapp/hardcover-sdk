@@ -19,6 +19,24 @@ may rename or remove things; each one is listed here with what to change.
 - `books.get()` and the other book-detail results now include
   `cachedHeaderImage`. User profiles, including `me.get()`, now include
   `cachedCover` and `cachedGenres`.
+- Book details include `ratingsDistribution`, the ratings per star value for a
+  histogram (new `RatingCount`, `[]` when a book has none).
+- User profiles, including `me.get()`, include `admin`: true for Hardcover
+  staff.
+- camelCase keys inside JSON columns that stored them in snake_case:
+  `colorName` on images, `contributorRoleId`, `contributorRoleName`,
+  `contributorRoleBlurb` and the three `contributorSpecialization*` keys on
+  contributors, and `booksCount` and `primaryBooksCount` on a featured
+  series. Featured series now read the same in book results and search hits.
+- Search hits' `featuredSeries` is typed (new `SearchFeaturedSeries`) instead
+  of `Record<string, unknown>`.
+
+### Deprecated
+
+- The snake_case keys above (`color_name`, `contributor_role_*`,
+  `contributor_specialization_*`, `books_count`, `primary_books_count`). They
+  still arrive alongside the camelCase ones and will be removed in a later
+  minor release. Switch to the camelCase names.
 
 ### Changed
 
