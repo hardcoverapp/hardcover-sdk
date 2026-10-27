@@ -10,6 +10,9 @@ export async function bookDetails(hc: HardcoverClient) {
   console.log(book.contributions.map((c) => c.author?.name).join(", "));
   console.log(book.bookSeries.map((s) => `${s.series?.name} #${s.position}`));
 
+  // Ratings per star value, for a histogram. Empty when nobody has rated it.
+  for (const { rating, count } of book.ratingsDistribution) console.log(`${rating}★`, count);
+
   // Editions, most-read first, a page at a time.
   const { items: editions, hasMore } = await hc.books.editions(book.id, { limit: 10 });
   for (const e of editions) console.log(e.id, e.editionFormat, e.isbn13, e.pages);

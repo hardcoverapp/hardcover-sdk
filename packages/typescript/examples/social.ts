@@ -9,6 +9,7 @@ export async function aReadersProfile(hc: HardcoverClient) {
   // Usernames are case-insensitive, and a leading @ is fine.
   const reader = await hc.users.getByUsername("@adam");
   if (!reader) return;
+  console.log(reader.username, reader.flair, reader.admin ? "Team" : "");
 
   const { items: followers } = await hc.users.followers(reader.id, { limit: 5 });
   console.log(`${reader.followersCount} followers, e.g.`, followers.map((f) => f.user.username));

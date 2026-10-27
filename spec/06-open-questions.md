@@ -147,6 +147,10 @@ read-only production token. The mobile apps come next and will likely hit the sa
     .series?.name` needs no cast. Helpers are still open.
     **More types (2026-10-26):** `cached_header_image`, `cached_cover`,
     `cached_genres`, `cached_similar_book_ids` and `cached_book_ids` too.
+    **camelCase keys (2026-10-27, 0.1.1):** the snake_case keys inside images,
+    contributors and a featured series also arrive in camelCase, the stored
+    keys deprecated (spec/03, Casing). `books.ratings_distribution` is typed
+    too.
 
 ### Open: for the API project
 
