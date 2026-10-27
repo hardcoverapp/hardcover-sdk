@@ -30,6 +30,11 @@ export const auth = {
     }
   },
   "oauth": {
+    "paths": {
+      "token": "/token",
+      "revoke": "/revoke",
+      "device": "/device"
+    },
     "pkce": {
       "method": "S256",
       "verifierBytes": 32,
@@ -72,6 +77,12 @@ export const auth = {
       "signed-out": "The app called signOut.",
       "revoked": "The server refused the refresh token (invalid_grant): revoked on the website, re-authorization required, expired, or replayed.",
       "expired": "The access token expired and there is no refresh token (an identity-only grant)."
+    },
+    "signedOutMessages": {
+      "not-signed-in": "Not signed in to Hardcover.",
+      "signed-out": "Signed out of Hardcover.",
+      "revoked": "Hardcover no longer accepts this sign-in (revoked or expired). Sign in again.",
+      "expired": "The Hardcover sign-in expired and can't be refreshed. Sign in again."
     },
     "tokenSet": {
       "fields": {

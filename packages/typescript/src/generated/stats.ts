@@ -3,7 +3,8 @@
 export const stats = {
   "population": {
     "readStatusId": 3,
-    "minReadCount": 1
+    "minReadCount": 1,
+    "pageSize": 100
   },
   "countedReads": {
     "unknownPrecision": 0,

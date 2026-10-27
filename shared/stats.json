@@ -2,9 +2,10 @@
   "$comment": "Rules for the stats module (spec/03 Stats module), shared by every SDK so they compute identical numbers from the same library data. They mirror the Hardcover app's Stats page (app: Stats::CountedReads and lib/stats/computeStats.ts) except where noted. Cases: shared/conformance/stats.json.",
 
   "population": {
-    "$comment": "Which library entries stats look at: on the Read shelf, or finished at least once (read_count >= 1) and since moved to another shelf. DNF is out because the server keeps its read_count at 0. Fetched by GetStatsLibrary.",
+    "$comment": "Which library entries stats look at: on the Read shelf, or finished at least once (read_count >= 1) and since moved to another shelf. DNF is out because the server keeps its read_count at 0. Fetched by GetStatsLibrary, pageSize rows per request (user_books has no row cap; this keeps each response small).",
     "readStatusId": 3,
-    "minReadCount": 1
+    "minReadCount": 1,
+    "pageSize": 100
   },
 
   "countedReads": {

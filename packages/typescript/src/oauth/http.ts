@@ -1,5 +1,6 @@
 // Talking to the OAuth endpoints: form-encoded POSTs over the same Transport
 // the GraphQL client uses, so the mock transport covers them in tests.
+import { auth } from "../generated/auth.ts";
 import { client as constants } from "../generated/client.ts";
 import { environments, type Environment } from "../generated/environments.ts";
 import { version } from "../generated/version.ts";
@@ -75,9 +76,9 @@ export function resolveConfig(config: OAuthConfig): ResolvedOAuthConfig {
 
   const endpoints: OAuthEndpoints = {
     authorize: oauth?.authorize ?? environment.authorize ?? "",
-    token: oauth?.token ?? `${environment.oauth}/token`,
-    revoke: oauth?.revoke ?? `${environment.oauth}/revoke`,
-    device: oauth?.device ?? `${environment.oauth}/device`,
+    token: oauth?.token ?? `${environment.oauth}${auth.oauth.paths.token}`,
+    revoke: oauth?.revoke ?? `${environment.oauth}${auth.oauth.paths.revoke}`,
+    device: oauth?.device ?? `${environment.oauth}${auth.oauth.paths.device}`,
     issuer: oauth?.issuer ?? environment.issuer,
   };
 

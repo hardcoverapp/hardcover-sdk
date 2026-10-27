@@ -1,4 +1,5 @@
 // Mirrors shared/errors.json. Names and hierarchy are canonical across SDKs.
+import { auth } from "../generated/auth.ts";
 
 /** Extra details an error carries. Used when creating errors, e.g. in a custom transport or a test. */
 export interface HardcoverErrorOptions {
@@ -31,7 +32,7 @@ export class HardcoverError extends Error {
  */
 export class AuthenticationError extends HardcoverError {}
 
-// Reasons mirror shared/auth.json.
+// Reasons and their messages mirror shared/auth.json.
 /**
  * Why an OAuth session has no usable tokens: `not-signed-in` (never signed
  * in), `signed-out` (here or in another process sharing the store), `revoked`
@@ -55,12 +56,7 @@ export class SignedOutError extends AuthenticationError {
   }
 }
 
-const SIGNED_OUT_MESSAGES: Record<SignedOutReason, string> = {
-  "not-signed-in": "Not signed in to Hardcover.",
-  "signed-out": "Signed out of Hardcover.",
-  revoked: "Hardcover no longer accepts this sign-in (revoked or expired). Sign in again.",
-  expired: "The Hardcover sign-in expired and can't be refreshed. Sign in again.",
-};
+const SIGNED_OUT_MESSAGES: Record<SignedOutReason, string> = auth.oauth.signedOutMessages;
 
 /**
  * The token lacks scopes this request needs. `missingScopes` lists every one,

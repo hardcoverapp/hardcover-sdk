@@ -1,12 +1,12 @@
 // Fetching what stats need: the reader's counted library, page by page, and
 // the small contributor-role tables.
 import type { HardcoverClient } from "../core/client.ts";
+import { stats as rules } from "../generated/stats.ts";
 import { operations } from "../operations.ts";
 import { computeStats, type ReadingStats, type StatsData, type StatsLibraryEntry } from "./compute.ts";
 import type { StatsPeriod } from "./period.ts";
 
-// user_books has no row cap; 100 a page keeps each response small.
-const PAGE_SIZE = 100;
+const PAGE_SIZE = rules.population.pageSize;
 
 /**
  * Fetches the signed-in reader's library data for stats: every book on the
