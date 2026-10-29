@@ -28,6 +28,7 @@ export {
   type LibraryChanges,
   type LibraryEntryForBook,
   type LibraryChangesOptions,
+  type LibraryAddOptions,
   type LibraryEntryPatch,
   type LibraryEntryWithBook,
   type LibraryListItem,

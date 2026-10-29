@@ -1,5 +1,5 @@
 {
-  "graphql": "http://localhost:8081/v1/graphql",
-  "capabilities": "http://localhost:8081/capabilities",
-  "fetchedAt": "2026-10-08T00:08:01.445Z"
+  "graphql": "https://api.hardcover.app/v1/graphql",
+  "capabilities": "https://api.hardcover.app/capabilities",
+  "fetchedAt": "2026-10-29T23:42:20.041Z"
 }

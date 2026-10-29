@@ -83,6 +83,26 @@
     }
   },
   {
+    "id": "library/add-imported-skips-the-feed",
+    "method": "library.add",
+    "args": [100, { "imported": true }],
+    "responses": [
+      {
+        "status": 200,
+        "body": { "data": { "insert_user_book": { "id": 7, "error": null, "user_book": { "id": 7 } } } }
+      }
+    ],
+    "expect": {
+      "requests": [
+        {
+          "operationName": "AddUserBook",
+          "variables": { "object": { "book_id": 100, "status_id": 1, "imported": true } }
+        }
+      ],
+      "result": { "id": 7 }
+    }
+  },
+  {
     "id": "library/add-rejects-a-bad-rating",
     "method": "library.add",
     "args": [100, { "rating": 3.3 }],

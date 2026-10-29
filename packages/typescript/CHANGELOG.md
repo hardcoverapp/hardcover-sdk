@@ -25,6 +25,9 @@ the deprecated keys below still work.
   `CachedImage`, and `{}` when there's no banner, which is most of the time.
 - **A reader's genres.** User profiles include `cachedGenres`, their most-read
   genres with a count each (new `CachedGenre`).
+- **Quiet imports.** `library.add(bookId, { imported: true })` adds a book
+  without posting it to followers' feeds, for bulk imports and syncs (new
+  `LibraryAddOptions`). The Goodreads import example uses it.
 - **Staff flag.** User profiles include `admin`, true for Hardcover staff, for
   showing the site's "Team" badge.
 - **More typed JSON columns.** `cachedSimilarBookIds` on books and

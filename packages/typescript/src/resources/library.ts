@@ -118,6 +118,15 @@ export interface LibraryEntryPatch {
   occurredAt?: OccurredAt;
 }
 
+/** Options for `library.add`: the entry's fields, plus `imported`. */
+export interface LibraryAddOptions extends LibraryEntryPatch {
+  /**
+   * Adds the book quietly, as an import: no activity is posted to followers'
+   * feeds. Use it for bulk imports and syncs.
+   */
+  imported?: boolean;
+}
+
 export interface SetStatusOptions {
   /** The day of the change (YYYY-MM-DD). The server uses today when left out. */
   date?: string;
@@ -263,15 +272,18 @@ export class LibraryResource {
   }
 
   /**
-   * Adds a book (Want to Read unless `status` says otherwise).
+   * Adds a book (Want to Read unless `status` says otherwise). Pass
+   * `imported: true` when adding many books at once, so followers' feeds
+   * don't fill up with them.
    * Scopes: `write:library`.
    */
-  async add(bookId: number, options: LibraryEntryPatch = {}): Promise<LibraryEntry> {
-    const patch = { status: UserBookStatus.WantToRead, ...options };
+  async add(bookId: number, options: LibraryAddOptions = {}): Promise<LibraryEntry> {
+    const { imported, ...rest } = options;
+    const patch = { status: UserBookStatus.WantToRead, ...rest };
     assertRating(patch.rating);
 
     const { insert_user_book } = await this.client.request(operations.AddUserBook, {
-      object: { book_id: bookId, ...toWire(patch) },
+      object: { book_id: bookId, ...toWire(patch), ...(imported !== undefined && { imported }) },
     });
 
     return required(insert_user_book?.userBook, "insert_user_book", "library entry");

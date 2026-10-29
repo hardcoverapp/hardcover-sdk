@@ -68,6 +68,23 @@ export type GoalInput = {
 };
 
 /** Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'. */
+export type Int_Array_Comparison_Exp = {
+  /** is the array contained in the given array value */
+  _contained_in?: Array<number> | null | undefined;
+  /** does the array contain the given value */
+  _contains?: Array<number> | null | undefined;
+  _eq?: Array<number> | null | undefined;
+  _gt?: Array<number> | null | undefined;
+  _gte?: Array<number> | null | undefined;
+  _in?: Array<Array<number>> | null | undefined;
+  _is_null?: boolean | null | undefined;
+  _lt?: Array<number> | null | undefined;
+  _lte?: Array<number> | null | undefined;
+  _neq?: Array<number> | null | undefined;
+  _nin?: Array<Array<number>> | null | undefined;
+};
+
+/** Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'. */
 export type Int_Comparison_Exp = {
   _eq?: number | null | undefined;
   _gt?: number | null | undefined;
@@ -185,6 +202,7 @@ export type UserBookCreateInput = {
   edition_id?: number | null | undefined;
   finished_at_precision?: number | null | undefined;
   first_started_reading_date?: string | null | undefined;
+  imported?: boolean | null | undefined;
   last_read_date?: string | null | undefined;
   media_url?: string | null | undefined;
   privacy_setting_id?: number | null | undefined;
@@ -2154,6 +2172,7 @@ export type Collection_Imports_Avg_Order_By = {
   success_count?: Order_By | null | undefined;
   tag_resolution?: Order_By | null | undefined;
   total_count?: Order_By | null | undefined;
+  unmatched_count?: Order_By | null | undefined;
   user_id?: Order_By | null | undefined;
 };
 
@@ -2181,6 +2200,7 @@ export type Collection_Imports_Bool_Exp = {
   success_count?: Int_Comparison_Exp | null | undefined;
   tag_resolution?: Int_Comparison_Exp | null | undefined;
   total_count?: Int_Comparison_Exp | null | undefined;
+  unmatched_count?: Int_Comparison_Exp | null | undefined;
   updated_at?: Timestamptz_Comparison_Exp | null | undefined;
   user?: Users_Bool_Exp | null | undefined;
   user_id?: Int_Comparison_Exp | null | undefined;
@@ -2203,6 +2223,7 @@ export type Collection_Imports_Max_Order_By = {
   success_count?: Order_By | null | undefined;
   tag_resolution?: Order_By | null | undefined;
   total_count?: Order_By | null | undefined;
+  unmatched_count?: Order_By | null | undefined;
   updated_at?: Order_By | null | undefined;
   user_id?: Order_By | null | undefined;
 };
@@ -2224,6 +2245,7 @@ export type Collection_Imports_Min_Order_By = {
   success_count?: Order_By | null | undefined;
   tag_resolution?: Order_By | null | undefined;
   total_count?: Order_By | null | undefined;
+  unmatched_count?: Order_By | null | undefined;
   updated_at?: Order_By | null | undefined;
   user_id?: Order_By | null | undefined;
 };
@@ -2238,6 +2260,7 @@ export type Collection_Imports_Stddev_Order_By = {
   success_count?: Order_By | null | undefined;
   tag_resolution?: Order_By | null | undefined;
   total_count?: Order_By | null | undefined;
+  unmatched_count?: Order_By | null | undefined;
   user_id?: Order_By | null | undefined;
 };
 
@@ -2251,6 +2274,7 @@ export type Collection_Imports_Stddev_Pop_Order_By = {
   success_count?: Order_By | null | undefined;
   tag_resolution?: Order_By | null | undefined;
   total_count?: Order_By | null | undefined;
+  unmatched_count?: Order_By | null | undefined;
   user_id?: Order_By | null | undefined;
 };
 
@@ -2264,6 +2288,7 @@ export type Collection_Imports_Stddev_Samp_Order_By = {
   success_count?: Order_By | null | undefined;
   tag_resolution?: Order_By | null | undefined;
   total_count?: Order_By | null | undefined;
+  unmatched_count?: Order_By | null | undefined;
   user_id?: Order_By | null | undefined;
 };
 
@@ -2277,6 +2302,7 @@ export type Collection_Imports_Sum_Order_By = {
   success_count?: Order_By | null | undefined;
   tag_resolution?: Order_By | null | undefined;
   total_count?: Order_By | null | undefined;
+  unmatched_count?: Order_By | null | undefined;
   user_id?: Order_By | null | undefined;
 };
 
@@ -2290,6 +2316,7 @@ export type Collection_Imports_Var_Pop_Order_By = {
   success_count?: Order_By | null | undefined;
   tag_resolution?: Order_By | null | undefined;
   total_count?: Order_By | null | undefined;
+  unmatched_count?: Order_By | null | undefined;
   user_id?: Order_By | null | undefined;
 };
 
@@ -2303,6 +2330,7 @@ export type Collection_Imports_Var_Samp_Order_By = {
   success_count?: Order_By | null | undefined;
   tag_resolution?: Order_By | null | undefined;
   total_count?: Order_By | null | undefined;
+  unmatched_count?: Order_By | null | undefined;
   user_id?: Order_By | null | undefined;
 };
 
@@ -2316,11 +2344,28 @@ export type Collection_Imports_Variance_Order_By = {
   success_count?: Order_By | null | undefined;
   tag_resolution?: Order_By | null | undefined;
   total_count?: Order_By | null | undefined;
+  unmatched_count?: Order_By | null | undefined;
   user_id?: Order_By | null | undefined;
 };
 
 export type Contributions_Aggregate_Bool_Exp = {
+  bool_and?: Contributions_Aggregate_Bool_Exp_Bool_And | null | undefined;
+  bool_or?: Contributions_Aggregate_Bool_Exp_Bool_Or | null | undefined;
   count?: Contributions_Aggregate_Bool_Exp_Count | null | undefined;
+};
+
+export type Contributions_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Contributions_Select_Column_Contributions_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: boolean | null | undefined;
+  filter?: Contributions_Bool_Exp | null | undefined;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Contributions_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Contributions_Select_Column_Contributions_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: boolean | null | undefined;
+  filter?: Contributions_Bool_Exp | null | undefined;
+  predicate: Boolean_Comparison_Exp;
 };
 
 export type Contributions_Aggregate_Bool_Exp_Count = {
@@ -2372,6 +2417,7 @@ export type Contributions_Bool_Exp = {
   contributor_specialization_id?: Int_Comparison_Exp | null | undefined;
   created_at?: Timestamp_Comparison_Exp | null | undefined;
   id?: Bigint_Comparison_Exp | null | undefined;
+  primary_override?: Boolean_Comparison_Exp | null | undefined;
   updated_at?: Timestamp_Comparison_Exp | null | undefined;
 };
 
@@ -2420,7 +2466,19 @@ export type Contributions_Select_Column =
   /** column name */
   | 'id'
   /** column name */
+  | 'primary_override'
+  /** column name */
   | 'updated_at';
+
+/** select "contributions_aggregate_bool_exp_bool_and_arguments_columns" columns of table "contributions" */
+export type Contributions_Select_Column_Contributions_Aggregate_Bool_Exp_Bool_And_Arguments_Columns =
+  /** column name */
+  | 'primary_override';
+
+/** select "contributions_aggregate_bool_exp_bool_or_arguments_columns" columns of table "contributions" */
+export type Contributions_Select_Column_Contributions_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns =
+  /** column name */
+  | 'primary_override';
 
 /** order by stddev() on columns of table "contributions" */
 export type Contributions_Stddev_Order_By = {
@@ -2495,7 +2553,9 @@ export type Contributor_Role_Specializations_Bool_Exp = {
   contributor_specialization_id?: Int_Comparison_Exp | null | undefined;
   description?: String_Comparison_Exp | null | undefined;
   id?: Int_Comparison_Exp | null | undefined;
+  librarian_instructions?: String_Comparison_Exp | null | undefined;
   primary?: Boolean_Comparison_Exp | null | undefined;
+  quick_list?: Jsonb_Comparison_Exp | null | undefined;
 };
 
 /** Boolean expression to filter rows from the table "contributor_roles". All fields are combined with a logical 'AND'. */
@@ -2507,9 +2567,10 @@ export type Contributor_Roles_Bool_Exp = {
   contributor_role_category_id?: Int_Comparison_Exp | null | undefined;
   description?: String_Comparison_Exp | null | undefined;
   id?: Int_Comparison_Exp | null | undefined;
-  important?: Int_Comparison_Exp | null | undefined;
+  librarian_instructions?: String_Comparison_Exp | null | undefined;
   name?: String_Comparison_Exp | null | undefined;
   primary?: Boolean_Comparison_Exp | null | undefined;
+  quick_list?: Jsonb_Comparison_Exp | null | undefined;
   slug?: String_Comparison_Exp | null | undefined;
 };
 
@@ -2521,6 +2582,7 @@ export type Contributor_Specializations_Bool_Exp = {
   blurb?: String_Comparison_Exp | null | undefined;
   description?: String_Comparison_Exp | null | undefined;
   id?: Int_Comparison_Exp | null | undefined;
+  librarian_instructions?: String_Comparison_Exp | null | undefined;
   name?: String_Comparison_Exp | null | undefined;
 };
 
@@ -3762,6 +3824,10 @@ export type Jsonb_Comparison_Exp = {
   _has_keys_any?: Array<string> | null | undefined;
   _in?: Array<unknown> | null | undefined;
   _is_null?: boolean | null | undefined;
+  /** does the jsonpath return any item for the specified JSON value */
+  _jsonb_path_exists?: string | null | undefined;
+  /** does the jsonpath predicate check return true for the specified JSON value */
+  _jsonb_path_match?: string | null | undefined;
   _lt?: unknown;
   _lte?: unknown;
   _neq?: unknown;
@@ -6845,6 +6911,35 @@ export type User_Flags_Variance_Order_By = {
   user_id?: Order_By | null | undefined;
 };
 
+/** Boolean expression to filter rows from the table "user_settings". All fields are combined with a logical 'AND'. */
+export type User_Settings_Bool_Exp = {
+  _and?: Array<User_Settings_Bool_Exp> | null | undefined;
+  _not?: User_Settings_Bool_Exp | null | undefined;
+  _or?: Array<User_Settings_Bool_Exp> | null | undefined;
+  contributor_role_lists?: Jsonb_Comparison_Exp | null | undefined;
+  created_at?: Timestamp_Comparison_Exp | null | undefined;
+  id?: Bigint_Comparison_Exp | null | undefined;
+  new_release_language_ids?: Int_Array_Comparison_Exp | null | undefined;
+  new_release_reading_format_ids?: Int_Array_Comparison_Exp | null | undefined;
+  shelf_showdown?: Jsonb_Comparison_Exp | null | undefined;
+  updated_at?: Timestamp_Comparison_Exp | null | undefined;
+  user?: Users_Bool_Exp | null | undefined;
+  user_id?: Int_Comparison_Exp | null | undefined;
+};
+
+/** Ordering options when selecting data from "user_settings". */
+export type User_Settings_Order_By = {
+  contributor_role_lists?: Order_By | null | undefined;
+  created_at?: Order_By | null | undefined;
+  id?: Order_By | null | undefined;
+  new_release_language_ids?: Order_By | null | undefined;
+  new_release_reading_format_ids?: Order_By | null | undefined;
+  shelf_showdown?: Order_By | null | undefined;
+  updated_at?: Order_By | null | undefined;
+  user?: Users_Order_By | null | undefined;
+  user_id?: Order_By | null | undefined;
+};
+
 /** order by aggregate values of table "users" */
 export type Users_Aggregate_Order_By = {
   avg?: Users_Avg_Order_By | null | undefined;
@@ -6955,6 +7050,7 @@ export type Users_Bool_Exp = {
   user_books?: User_Books_Bool_Exp | null | undefined;
   user_books_aggregate?: User_Books_Aggregate_Bool_Exp | null | undefined;
   user_flags?: User_Flags_Bool_Exp | null | undefined;
+  user_setting?: User_Settings_Bool_Exp | null | undefined;
   username?: Citext_Comparison_Exp | null | undefined;
 };
 
@@ -7114,6 +7210,7 @@ export type Users_Order_By = {
   updated_at?: Order_By | null | undefined;
   user_books_aggregate?: User_Books_Aggregate_Order_By | null | undefined;
   user_flags_aggregate?: User_Flags_Aggregate_Order_By | null | undefined;
+  user_setting?: User_Settings_Order_By | null | undefined;
   username?: Order_By | null | undefined;
 };
 

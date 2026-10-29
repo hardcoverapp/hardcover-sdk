@@ -209,6 +209,13 @@ input ContributionInputType {
   contribution: String
   contributor_role_id: Int
   contributor_specialization_id: Int
+  primary_override: ContributionPrimaryOverride
+}
+
+enum ContributionPrimaryOverride {
+  inherit
+  not_primary
+  primary
 }
 
 input CreateBookFromPlatformInput {
@@ -266,6 +273,7 @@ input DynamicSignalInput {
 }
 
 type EditionIdType {
+  created: Boolean
   edition: editions
   errors: [String]
   id: Int
@@ -423,6 +431,26 @@ type InsertBlockOutput {
 """
 Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'.
 """
+input Int_array_comparison_exp {
+  """is the array contained in the given array value"""
+  _contained_in: [Int!]
+
+  """does the array contain the given value"""
+  _contains: [Int!]
+  _eq: [Int!]
+  _gt: [Int!]
+  _gte: [Int!]
+  _in: [[Int!]!]
+  _is_null: Boolean
+  _lt: [Int!]
+  _lte: [Int!]
+  _neq: [Int!]
+  _nin: [[Int!]!]
+}
+
+"""
+Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'.
+"""
 input Int_comparison_exp {
   _eq: Int
   _gt: Int
@@ -524,9 +552,23 @@ type NewsletterStatusType {
 }
 
 type OptionalEditionIdType {
+  created: Boolean
   edition: editions
   errors: [String]
   id: Int
+  matched_by: String
+  throttled: Boolean
+}
+
+type PinDeleteType {
+  success: Boolean!
+}
+
+type PinIdType {
+  errors: [String]
+  id: Int
+  pin: pins
+  position: Int
 }
 
 input PromptAnswerCreateInput {
@@ -759,6 +801,7 @@ input UserBookCreateInput {
   edition_id: Int
   finished_at_precision: Int
   first_started_reading_date: date
+  imported: Boolean
   last_read_date: date
   media_url: String
   privacy_setting_id: Int
@@ -835,6 +878,17 @@ type UserIdType {
   errors: [String]
   id: Int
   user: users
+}
+
+type UserSettingsIdType {
+  errors: [String]
+  id: Int
+  user_setting: user_settings
+}
+
+input UserSettingsInput {
+  new_release_language_ids: [Int!]
+  new_release_reading_format_ids: [Int!]
 }
 
 type ValidateReceiptType {
@@ -3003,77 +3057,6 @@ input book_statuses_stream_cursor_value_input {
 }
 
 """
-columns and relationships of "bookles"
-"""
-type bookles {
-  """An object relationship"""
-  book: books
-  book_id: Int
-  created_at: timestamp
-  date: date
-  id: bigint!
-}
-
-"""
-Boolean expression to filter rows from the table "bookles". All fields are combined with a logical 'AND'.
-"""
-input bookles_bool_exp {
-  _and: [bookles_bool_exp!]
-  _not: bookles_bool_exp
-  _or: [bookles_bool_exp!]
-  book: books_bool_exp
-  book_id: Int_comparison_exp
-  created_at: timestamp_comparison_exp
-  date: date_comparison_exp
-  id: bigint_comparison_exp
-}
-
-"""Ordering options when selecting data from "bookles"."""
-input bookles_order_by {
-  book: books_order_by
-  book_id: order_by
-  created_at: order_by
-  date: order_by
-  id: order_by
-}
-
-"""
-select columns of table "bookles"
-"""
-enum bookles_select_column {
-  """column name"""
-  book_id
-
-  """column name"""
-  created_at
-
-  """column name"""
-  date
-
-  """column name"""
-  id
-}
-
-"""
-Streaming cursor of the table "bookles"
-"""
-input bookles_stream_cursor_input {
-  """Stream column input with initial value"""
-  initial_value: bookles_stream_cursor_value_input!
-
-  """cursor ordering"""
-  ordering: cursor_ordering
-}
-
-"""Initial value of the column from where the streaming should start"""
-input bookles_stream_cursor_value_input {
-  book_id: Int
-  created_at: timestamp
-  date: date
-  id: bigint
-}
-
-"""
 columns and relationships of "books"
 """
 type books {
@@ -5215,7 +5198,6 @@ input type for updating data in table "collection_import_results"
 """
 input collection_import_results_set_input {
   report: Int
-  state: String
 }
 
 """
@@ -5363,6 +5345,7 @@ type collection_imports {
   success_count: Int!
   tag_resolution: Int!
   total_count: Int!
+  unmatched_count: Int!
   updated_at: timestamptz
 
   """An object relationship"""
@@ -5399,6 +5382,7 @@ input collection_imports_avg_order_by {
   success_count: order_by
   tag_resolution: order_by
   total_count: order_by
+  unmatched_count: order_by
   user_id: order_by
 }
 
@@ -5428,6 +5412,7 @@ input collection_imports_bool_exp {
   success_count: Int_comparison_exp
   tag_resolution: Int_comparison_exp
   total_count: Int_comparison_exp
+  unmatched_count: Int_comparison_exp
   updated_at: timestamptz_comparison_exp
   user: users_bool_exp
   user_id: Int_comparison_exp
@@ -5452,6 +5437,7 @@ input collection_imports_max_order_by {
   success_count: order_by
   tag_resolution: order_by
   total_count: order_by
+  unmatched_count: order_by
   updated_at: order_by
   user_id: order_by
 }
@@ -5475,6 +5461,7 @@ input collection_imports_min_order_by {
   success_count: order_by
   tag_resolution: order_by
   total_count: order_by
+  unmatched_count: order_by
   updated_at: order_by
   user_id: order_by
 }
@@ -5500,6 +5487,7 @@ input collection_imports_order_by {
   success_count: order_by
   tag_resolution: order_by
   total_count: order_by
+  unmatched_count: order_by
   updated_at: order_by
   user: users_order_by
   user_id: order_by
@@ -5564,6 +5552,9 @@ enum collection_imports_select_column {
   total_count
 
   """column name"""
+  unmatched_count
+
+  """column name"""
   updated_at
 
   """column name"""
@@ -5582,6 +5573,7 @@ input collection_imports_stddev_order_by {
   success_count: order_by
   tag_resolution: order_by
   total_count: order_by
+  unmatched_count: order_by
   user_id: order_by
 }
 
@@ -5597,6 +5589,7 @@ input collection_imports_stddev_pop_order_by {
   success_count: order_by
   tag_resolution: order_by
   total_count: order_by
+  unmatched_count: order_by
   user_id: order_by
 }
 
@@ -5612,6 +5605,7 @@ input collection_imports_stddev_samp_order_by {
   success_count: order_by
   tag_resolution: order_by
   total_count: order_by
+  unmatched_count: order_by
   user_id: order_by
 }
 
@@ -5646,6 +5640,7 @@ input collection_imports_stream_cursor_value_input {
   success_count: Int
   tag_resolution: Int
   total_count: Int
+  unmatched_count: Int
   updated_at: timestamptz
   user_id: Int
 }
@@ -5662,6 +5657,7 @@ input collection_imports_sum_order_by {
   success_count: order_by
   tag_resolution: order_by
   total_count: order_by
+  unmatched_count: order_by
   user_id: order_by
 }
 
@@ -5677,6 +5673,7 @@ input collection_imports_var_pop_order_by {
   success_count: order_by
   tag_resolution: order_by
   total_count: order_by
+  unmatched_count: order_by
   user_id: order_by
 }
 
@@ -5692,6 +5689,7 @@ input collection_imports_var_samp_order_by {
   success_count: order_by
   tag_resolution: order_by
   total_count: order_by
+  unmatched_count: order_by
   user_id: order_by
 }
 
@@ -5707,6 +5705,7 @@ input collection_imports_variance_order_by {
   success_count: order_by
   tag_resolution: order_by
   total_count: order_by
+  unmatched_count: order_by
   user_id: order_by
 }
 
@@ -5736,6 +5735,7 @@ type contributions {
   contributor_specialization_id: Int
   created_at: timestamp!
   id: bigint!
+  primary_override: Boolean
   updated_at: timestamp!
 }
 
@@ -5748,7 +5748,23 @@ type contributions_aggregate {
 }
 
 input contributions_aggregate_bool_exp {
+  bool_and: contributions_aggregate_bool_exp_bool_and
+  bool_or: contributions_aggregate_bool_exp_bool_or
   count: contributions_aggregate_bool_exp_count
+}
+
+input contributions_aggregate_bool_exp_bool_and {
+  arguments: contributions_select_column_contributions_aggregate_bool_exp_bool_and_arguments_columns!
+  distinct: Boolean
+  filter: contributions_bool_exp
+  predicate: Boolean_comparison_exp!
+}
+
+input contributions_aggregate_bool_exp_bool_or {
+  arguments: contributions_select_column_contributions_aggregate_bool_exp_bool_or_arguments_columns!
+  distinct: Boolean
+  filter: contributions_bool_exp
+  predicate: Boolean_comparison_exp!
 }
 
 input contributions_aggregate_bool_exp_count {
@@ -5832,6 +5848,7 @@ input contributions_bool_exp {
   contributor_specialization_id: Int_comparison_exp
   created_at: timestamp_comparison_exp
   id: bigint_comparison_exp
+  primary_override: Boolean_comparison_exp
   updated_at: timestamp_comparison_exp
 }
 
@@ -5906,6 +5923,7 @@ input contributions_order_by {
   contributor_specialization_id: order_by
   created_at: order_by
   id: order_by
+  primary_override: order_by
   updated_at: order_by
 }
 
@@ -5938,7 +5956,26 @@ enum contributions_select_column {
   id
 
   """column name"""
+  primary_override
+
+  """column name"""
   updated_at
+}
+
+"""
+select "contributions_aggregate_bool_exp_bool_and_arguments_columns" columns of table "contributions"
+"""
+enum contributions_select_column_contributions_aggregate_bool_exp_bool_and_arguments_columns {
+  """column name"""
+  primary_override
+}
+
+"""
+select "contributions_aggregate_bool_exp_bool_or_arguments_columns" columns of table "contributions"
+"""
+enum contributions_select_column_contributions_aggregate_bool_exp_bool_or_arguments_columns {
+  """column name"""
+  primary_override
 }
 
 """aggregate stddev on columns"""
@@ -6022,6 +6059,7 @@ input contributions_stream_cursor_value_input {
   contributor_specialization_id: Int
   created_at: timestamp
   id: bigint
+  primary_override: Boolean
   updated_at: timestamp
 }
 
@@ -6176,7 +6214,12 @@ type contributor_role_specializations {
   contributor_specialization_id: Int!
   description: String
   id: Int!
+  librarian_instructions: String
   primary: Boolean
+  quick_list(
+    """JSON select path"""
+    path: String
+  ): jsonb!
 }
 
 """
@@ -6191,7 +6234,9 @@ input contributor_role_specializations_bool_exp {
   contributor_specialization_id: Int_comparison_exp
   description: String_comparison_exp
   id: Int_comparison_exp
+  librarian_instructions: String_comparison_exp
   primary: Boolean_comparison_exp
+  quick_list: jsonb_comparison_exp
 }
 
 """
@@ -6203,7 +6248,9 @@ input contributor_role_specializations_order_by {
   contributor_specialization_id: order_by
   description: order_by
   id: order_by
+  librarian_instructions: order_by
   primary: order_by
+  quick_list: order_by
 }
 
 """
@@ -6226,7 +6273,13 @@ enum contributor_role_specializations_select_column {
   id
 
   """column name"""
+  librarian_instructions
+
+  """column name"""
   primary
+
+  """column name"""
+  quick_list
 }
 
 """
@@ -6247,7 +6300,9 @@ input contributor_role_specializations_stream_cursor_value_input {
   contributor_specialization_id: Int
   description: String
   id: Int
+  librarian_instructions: String
   primary: Boolean
+  quick_list: jsonb
 }
 
 """
@@ -6258,9 +6313,13 @@ type contributor_roles {
   contributor_role_category_id: Int!
   description: String
   id: Int!
-  important: Int!
+  librarian_instructions: String
   name: String!
   primary: Boolean!
+  quick_list(
+    """JSON select path"""
+    path: String
+  ): jsonb!
   slug: String
 }
 
@@ -6275,9 +6334,10 @@ input contributor_roles_bool_exp {
   contributor_role_category_id: Int_comparison_exp
   description: String_comparison_exp
   id: Int_comparison_exp
-  important: Int_comparison_exp
+  librarian_instructions: String_comparison_exp
   name: String_comparison_exp
   primary: Boolean_comparison_exp
+  quick_list: jsonb_comparison_exp
   slug: String_comparison_exp
 }
 
@@ -6287,9 +6347,10 @@ input contributor_roles_order_by {
   contributor_role_category_id: order_by
   description: order_by
   id: order_by
-  important: order_by
+  librarian_instructions: order_by
   name: order_by
   primary: order_by
+  quick_list: order_by
   slug: order_by
 }
 
@@ -6310,13 +6371,16 @@ enum contributor_roles_select_column {
   id
 
   """column name"""
-  important
+  librarian_instructions
 
   """column name"""
   name
 
   """column name"""
   primary
+
+  """column name"""
+  quick_list
 
   """column name"""
   slug
@@ -6339,9 +6403,10 @@ input contributor_roles_stream_cursor_value_input {
   contributor_role_category_id: Int
   description: String
   id: Int
-  important: Int
+  librarian_instructions: String
   name: String
   primary: Boolean
+  quick_list: jsonb
   slug: String
 }
 
@@ -6352,6 +6417,7 @@ type contributor_specializations {
   blurb: String
   description: String
   id: Int!
+  librarian_instructions: String
   name: String!
 }
 
@@ -6365,6 +6431,7 @@ input contributor_specializations_bool_exp {
   blurb: String_comparison_exp
   description: String_comparison_exp
   id: Int_comparison_exp
+  librarian_instructions: String_comparison_exp
   name: String_comparison_exp
 }
 
@@ -6375,6 +6442,7 @@ input contributor_specializations_order_by {
   blurb: order_by
   description: order_by
   id: order_by
+  librarian_instructions: order_by
   name: order_by
 }
 
@@ -6390,6 +6458,9 @@ enum contributor_specializations_select_column {
 
   """column name"""
   id
+
+  """column name"""
+  librarian_instructions
 
   """column name"""
   name
@@ -6411,6 +6482,7 @@ input contributor_specializations_stream_cursor_value_input {
   blurb: String
   description: String
   id: Int
+  librarian_instructions: String
   name: String
 }
 
@@ -10463,6 +10535,14 @@ input jsonb_comparison_exp {
   _has_keys_any: [String!]
   _in: [jsonb!]
   _is_null: Boolean
+
+  """does the jsonpath return any item for the specified JSON value"""
+  _jsonb_path_exists: String
+
+  """
+  does the jsonpath predicate check return true for the specified JSON value
+  """
+  _jsonb_path_match: String
   _lt: jsonb
   _lte: jsonb
   _neq: jsonb
@@ -12339,6 +12419,12 @@ type mutation_root {
   book_mapping_normalize(deep: Boolean!, id: Int!): BookMappingIdType
   book_normalize(deep: Boolean, id: Int!): BookIdType
 
+  """collection_import_result_create_book"""
+  collection_import_result_create_book(id: Int!): CollectionImportResultIdType
+
+  """collection_import_result_match"""
+  collection_import_result_match(book_id: Int!, edition_id: Int, id: Int!): CollectionImportResultIdType
+
   """collection_import_result_reimport"""
   collection_import_result_reimport(id: Int!): CollectionImportResultIdType
 
@@ -12409,6 +12495,9 @@ type mutation_root {
 
   """delete_list_member"""
   delete_list_member(list_id: Int!, user_id: Int!): ListMemberDeleteType
+
+  """delete_pin"""
+  delete_pin(pinnable_id: Int!, pinnable_type: String!): PinDeleteType
 
   """delete_prompt_answer"""
   delete_prompt_answer(id: Int!): PromptAnswerIdType
@@ -12530,6 +12619,9 @@ type mutation_root {
     """upsert condition"""
     on_conflict: notification_settings_on_conflict
   ): notification_settings
+
+  """insert_pin"""
+  insert_pin(pinnable_id: Int!, pinnable_type: String!): PinIdType
 
   """insert_prompt"""
   insert_prompt(object: CreatePromptInput!): PromptIdType
@@ -12757,6 +12849,40 @@ type mutation_root {
     updates: [notification_settings_updates!]!
   ): [notification_settings_mutation_response]
 
+  """
+  update data of the table: "pins"
+  """
+  update_pins(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: pins_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: pins_set_input
+
+    """filter the rows which have to be updated"""
+    where: pins_bool_exp!
+  ): pins_mutation_response
+
+  """
+  update single row of the table: "pins"
+  """
+  update_pins_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: pins_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: pins_set_input
+    pk_columns: pins_pk_columns_input!
+  ): pins
+
+  """
+  update multiples rows of table: "pins"
+  """
+  update_pins_many(
+    """updates to execute, in order"""
+    updates: [pins_updates!]!
+  ): [pins_mutation_response]
+
   """update_prompt"""
   update_prompt(object: UpdatePromptInput!): PromptIdType
 
@@ -12808,6 +12934,9 @@ type mutation_root {
 
   """update_user_privacy_setting"""
   update_user_privacy_setting(privacy_setting_id: Int!): UserIdType
+
+  """update_user_settings"""
+  update_user_settings(object: UserSettingsInput!): UserSettingsIdType
 
   """update_vibe"""
   update_vibe(id: Int!, object: VibeInput!): VibeIdType
@@ -13850,6 +13979,142 @@ enum order_by {
 
   """in descending order, nulls last"""
   desc_nulls_last
+}
+
+"""
+columns and relationships of "pins"
+"""
+type pins {
+  created_at: timestamp!
+  id: bigint!
+  pinnable_id: bigint!
+  pinnable_type: String!
+  pinned_to_id: bigint!
+  pinned_to_type: String!
+  position: Int!
+  updated_at: timestamp!
+}
+
+"""
+Boolean expression to filter rows from the table "pins". All fields are combined with a logical 'AND'.
+"""
+input pins_bool_exp {
+  _and: [pins_bool_exp!]
+  _not: pins_bool_exp
+  _or: [pins_bool_exp!]
+  created_at: timestamp_comparison_exp
+  id: bigint_comparison_exp
+  pinnable_id: bigint_comparison_exp
+  pinnable_type: String_comparison_exp
+  pinned_to_id: bigint_comparison_exp
+  pinned_to_type: String_comparison_exp
+  position: Int_comparison_exp
+  updated_at: timestamp_comparison_exp
+}
+
+"""
+input type for incrementing numeric columns in table "pins"
+"""
+input pins_inc_input {
+  position: Int
+}
+
+"""
+response of any mutation on the table "pins"
+"""
+type pins_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [pins!]!
+}
+
+"""Ordering options when selecting data from "pins"."""
+input pins_order_by {
+  created_at: order_by
+  id: order_by
+  pinnable_id: order_by
+  pinnable_type: order_by
+  pinned_to_id: order_by
+  pinned_to_type: order_by
+  position: order_by
+  updated_at: order_by
+}
+
+"""primary key columns input for table: pins"""
+input pins_pk_columns_input {
+  id: bigint!
+}
+
+"""
+select columns of table "pins"
+"""
+enum pins_select_column {
+  """column name"""
+  created_at
+
+  """column name"""
+  id
+
+  """column name"""
+  pinnable_id
+
+  """column name"""
+  pinnable_type
+
+  """column name"""
+  pinned_to_id
+
+  """column name"""
+  pinned_to_type
+
+  """column name"""
+  position
+
+  """column name"""
+  updated_at
+}
+
+"""
+input type for updating data in table "pins"
+"""
+input pins_set_input {
+  position: Int
+}
+
+"""
+Streaming cursor of the table "pins"
+"""
+input pins_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: pins_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input pins_stream_cursor_value_input {
+  created_at: timestamp
+  id: bigint
+  pinnable_id: bigint
+  pinnable_type: String
+  pinned_to_id: bigint
+  pinned_to_type: String
+  position: Int
+  updated_at: timestamp
+}
+
+input pins_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: pins_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: pins_set_input
+
+  """filter the rows which have to be updated"""
+  where: pins_bool_exp!
 }
 
 """
@@ -15419,29 +15684,6 @@ type query_root {
   """fetch data from the table: "book_statuses" using primary key columns"""
   book_statuses_by_pk(id: smallint!): book_statuses
 
-  """
-  fetch data from the table: "bookles"
-  """
-  bookles(
-    """distinct select on columns"""
-    distinct_on: [bookles_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [bookles_order_by!]
-
-    """filter the rows returned"""
-    where: bookles_bool_exp
-  ): [bookles!]!
-
-  """fetch data from the table: "bookles" using primary key columns"""
-  bookles_by_pk(id: bigint!): bookles
-
   """An array relationship"""
   books(
     """distinct select on columns"""
@@ -16439,6 +16681,29 @@ type query_root {
   notifications_by_pk(id: Int!): notifications
 
   """
+  fetch data from the table: "pins"
+  """
+  pins(
+    """distinct select on columns"""
+    distinct_on: [pins_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pins_order_by!]
+
+    """filter the rows returned"""
+    where: pins_bool_exp
+  ): [pins!]!
+
+  """fetch data from the table: "pins" using primary key columns"""
+  pins_by_pk(id: bigint!): pins
+
+  """
   fetch data from the table: "platforms"
   """
   platforms(
@@ -16996,6 +17261,29 @@ type query_root {
 
   """fetch data from the table: "user_referrals" using primary key columns"""
   user_referrals_by_pk(id: bigint!): user_referrals
+
+  """
+  fetch data from the table: "user_settings"
+  """
+  user_settings(
+    """distinct select on columns"""
+    distinct_on: [user_settings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [user_settings_order_by!]
+
+    """filter the rows returned"""
+    where: user_settings_bool_exp
+  ): [user_settings!]!
+
+  """fetch data from the table: "user_settings" using primary key columns"""
+  user_settings_by_pk(id: bigint!): user_settings
 
   """
   fetch data from the table: "user_statuses"
@@ -18167,43 +18455,6 @@ type subscription_root {
     """filter the rows returned"""
     where: book_statuses_bool_exp
   ): [book_statuses!]!
-
-  """
-  fetch data from the table: "bookles"
-  """
-  bookles(
-    """distinct select on columns"""
-    distinct_on: [bookles_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [bookles_order_by!]
-
-    """filter the rows returned"""
-    where: bookles_bool_exp
-  ): [bookles!]!
-
-  """fetch data from the table: "bookles" using primary key columns"""
-  bookles_by_pk(id: bigint!): bookles
-
-  """
-  fetch data from the table in a streaming manner: "bookles"
-  """
-  bookles_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [bookles_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: bookles_bool_exp
-  ): [bookles!]!
 
   """An array relationship"""
   books(
@@ -19672,6 +19923,43 @@ type subscription_root {
   ): [notifications!]!
 
   """
+  fetch data from the table: "pins"
+  """
+  pins(
+    """distinct select on columns"""
+    distinct_on: [pins_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pins_order_by!]
+
+    """filter the rows returned"""
+    where: pins_bool_exp
+  ): [pins!]!
+
+  """fetch data from the table: "pins" using primary key columns"""
+  pins_by_pk(id: bigint!): pins
+
+  """
+  fetch data from the table in a streaming manner: "pins"
+  """
+  pins_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [pins_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: pins_bool_exp
+  ): [pins!]!
+
+  """
   fetch data from the table: "platforms"
   """
   platforms(
@@ -20502,6 +20790,43 @@ type subscription_root {
     """filter the rows returned"""
     where: user_referrals_bool_exp
   ): [user_referrals!]!
+
+  """
+  fetch data from the table: "user_settings"
+  """
+  user_settings(
+    """distinct select on columns"""
+    distinct_on: [user_settings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [user_settings_order_by!]
+
+    """filter the rows returned"""
+    where: user_settings_bool_exp
+  ): [user_settings!]!
+
+  """fetch data from the table: "user_settings" using primary key columns"""
+  user_settings_by_pk(id: bigint!): user_settings
+
+  """
+  fetch data from the table in a streaming manner: "user_settings"
+  """
+  user_settings_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [user_settings_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: user_settings_bool_exp
+  ): [user_settings!]!
 
   """
   fetch data from the table: "user_statuses"
@@ -21757,6 +22082,7 @@ input update_user_input {
   bio: String
   birthdate: date
   buddy_read_default_privacy_setting_id: Int
+  contributor_role_lists: jsonb
   cover: String
   current_password: String
   default_reading_format_id: Int
@@ -24285,6 +24611,112 @@ input user_referrals_stream_cursor_value_input {
 }
 
 """
+columns and relationships of "user_settings"
+"""
+type user_settings {
+  contributor_role_lists(
+    """JSON select path"""
+    path: String
+  ): jsonb!
+  created_at: timestamp!
+  id: bigint!
+  new_release_language_ids: [Int!]!
+  new_release_reading_format_ids: [Int!]!
+  shelf_showdown(
+    """JSON select path"""
+    path: String
+  ): jsonb!
+  updated_at: timestamp!
+
+  """An object relationship"""
+  user: users
+  user_id: Int!
+}
+
+"""
+Boolean expression to filter rows from the table "user_settings". All fields are combined with a logical 'AND'.
+"""
+input user_settings_bool_exp {
+  _and: [user_settings_bool_exp!]
+  _not: user_settings_bool_exp
+  _or: [user_settings_bool_exp!]
+  contributor_role_lists: jsonb_comparison_exp
+  created_at: timestamp_comparison_exp
+  id: bigint_comparison_exp
+  new_release_language_ids: Int_array_comparison_exp
+  new_release_reading_format_ids: Int_array_comparison_exp
+  shelf_showdown: jsonb_comparison_exp
+  updated_at: timestamp_comparison_exp
+  user: users_bool_exp
+  user_id: Int_comparison_exp
+}
+
+"""Ordering options when selecting data from "user_settings"."""
+input user_settings_order_by {
+  contributor_role_lists: order_by
+  created_at: order_by
+  id: order_by
+  new_release_language_ids: order_by
+  new_release_reading_format_ids: order_by
+  shelf_showdown: order_by
+  updated_at: order_by
+  user: users_order_by
+  user_id: order_by
+}
+
+"""
+select columns of table "user_settings"
+"""
+enum user_settings_select_column {
+  """column name"""
+  contributor_role_lists
+
+  """column name"""
+  created_at
+
+  """column name"""
+  id
+
+  """column name"""
+  new_release_language_ids
+
+  """column name"""
+  new_release_reading_format_ids
+
+  """column name"""
+  shelf_showdown
+
+  """column name"""
+  updated_at
+
+  """column name"""
+  user_id
+}
+
+"""
+Streaming cursor of the table "user_settings"
+"""
+input user_settings_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: user_settings_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input user_settings_stream_cursor_value_input {
+  contributor_role_lists: jsonb
+  created_at: timestamp
+  id: bigint
+  new_release_language_ids: [Int!]
+  new_release_reading_format_ids: [Int!]
+  shelf_showdown: jsonb
+  updated_at: timestamp
+  user_id: Int
+}
+
+"""
 columns and relationships of "user_statuses"
 """
 type user_statuses {
@@ -24875,6 +25307,9 @@ type users {
     """filter the rows returned"""
     where: user_flags_bool_exp
   ): [user_flags!]!
+
+  """An object relationship"""
+  user_setting: user_settings
   username: citext
 }
 
@@ -25049,6 +25484,7 @@ input users_bool_exp {
   user_books: user_books_bool_exp
   user_books_aggregate: user_books_aggregate_bool_exp
   user_flags: user_flags_bool_exp
+  user_setting: user_settings_bool_exp
   username: citext_comparison_exp
 }
 
@@ -25212,6 +25648,7 @@ input users_order_by {
   updated_at: order_by
   user_books_aggregate: user_books_aggregate_order_by
   user_flags_aggregate: user_flags_aggregate_order_by
+  user_setting: user_settings_order_by
   username: order_by
 }
 
