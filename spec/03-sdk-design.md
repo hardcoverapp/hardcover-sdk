@@ -54,8 +54,8 @@ of this.
    `clientId`, `redirectUri`, the scopes on every sign-in, the store key.
    What users see on the consent screen and at `/link` (name, description,
    image) is the app's own registration on Hardcover, looked up by
-   `clientId`, so it can't read "Hardcover SDK". The SDK only appends its
-   own name and version to the app's `userAgent`, after it.
+   `clientId`, so it can't read "Hardcover SDK". The SDK names itself only
+   in `X-Hardcover-Client`; the app's `userAgent` is sent as given.
 
 ## Layers
 
@@ -100,7 +100,7 @@ of this.
 | `transport` | platform HTTP | Swap in the mock transport for tests |
 | `maxRetries` | 3 | Applies to 429 and to query-only network/5xx retries |
 | `timeoutMs` | 35000 | Just above the server's 30s |
-| `userAgent` | `hardcover-sdk-<lang>/<version>` | Callers append their app name. The gateway logs it per token. Browsers don't let `fetch` set it, so it only arrives from Node and native |
+| `userAgent` | `hardcover-sdk-<lang>/<version>` | The app's value replaces the default; `X-Hardcover-Client` still names the SDK. The gateway logs it per token. Browsers don't let `fetch` set it, so it only arrives from Node and native |
 | `onRateLimit` | none | Hook called with parsed headers after each response |
 | `onWarning` | `console.warn` | Problems that don't stop the client, e.g. a deprecated legacy JWT |
 | `pace` | true | Wait for the rate-limit allowance before sending (see Pacing) |
@@ -259,7 +259,9 @@ published type declarations:
 
 1. Serialize `{query, variables, operationName}`. The query comes from the
    generated document; `operationName` makes gateway logs readable.
-2. Send with `Authorization: Bearer <token>` and `User-Agent`.
+2. Send with `Authorization: Bearer <token>`, `User-Agent` and
+   `X-Hardcover-Client` (the bare `hardcover-sdk-<lang>/<version>`, which
+   unlike `User-Agent` also arrives from browsers).
 3. Parse the `RateLimit` and `RateLimit-Policy` headers (fall back to
    `X-RateLimit-*`) into `client.rateLimit` and call `onRateLimit`.
 4. Classify the response with the `match` rules in `errors.json`. The first

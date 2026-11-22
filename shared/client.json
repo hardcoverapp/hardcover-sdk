@@ -56,8 +56,12 @@
   },
 
   "userAgent": {
-    "$comment": "Sent on every request. {language} is the SDK's language in lowercase (typescript, swift, kotlin, python, ruby) and {version} its package version. When the app gives its own name, that goes first, separated by one space, so the server sees which app made the call. Browsers don't let fetch set User-Agent, so from a browser it never reaches the server.",
-    "sdkFormat": "hardcover-sdk-{language}/{version}",
-    "withApp": "{app} {sdk}"
+    "$comment": "{language} is the SDK's language in lowercase (typescript, swift, kotlin, python, ruby) and {version} its package version. User-Agent is sdkFormat by default; when the app gives its own, that replaces it whole, since the client header already names the SDK. Browsers don't let fetch set User-Agent, so from a browser it never reaches the server.",
+    "sdkFormat": "hardcover-sdk-{language}/{version}"
+  },
+
+  "clientHeader": {
+    "$comment": "Sent on every request with the bare sdkFormat value, never the app's name. Unlike User-Agent, fetch can set it, so the server can tell SDK traffic from browsers too. The API's CORS allows any request header on /v1/graphql and /oauth2/*.",
+    "name": "X-Hardcover-Client"
   }
 }

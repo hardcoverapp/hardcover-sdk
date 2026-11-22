@@ -51,7 +51,9 @@ export const client = {
     }
   },
   "userAgent": {
-    "sdkFormat": "hardcover-sdk-{language}/{version}",
-    "withApp": "{app} {sdk}"
+    "sdkFormat": "hardcover-sdk-{language}/{version}"
+  },
+  "clientHeader": {
+    "name": "X-Hardcover-Client"
   }
 } as const;

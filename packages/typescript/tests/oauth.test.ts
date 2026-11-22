@@ -91,13 +91,14 @@ describe("the app identifies itself (no SDK defaults)", () => {
     expect(() => secureStore({} as SecureKeyValue, "")).toThrow(/key/);
   });
 
-  it("puts the app's User-Agent before the SDK's", async () => {
+  it("sends the app's User-Agent as is and names the SDK in X-Hardcover-Client", async () => {
     const transport = new MockTransport([tokenResponse("new")]);
     const session = new OAuthSession({ clientId: "my-app", userAgent: "Shelfie/2.1", store: memoryStore(expiring), transport, now });
 
     await session.getAccessToken();
 
-    expect(transport.requests[0]!.headers["user-agent"]).toMatch(/^Shelfie\/2\.1 hardcover-sdk-typescript\//);
+    expect(transport.requests[0]!.headers["user-agent"]).toBe("Shelfie/2.1");
+    expect(transport.requests[0]!.headers["X-Hardcover-Client"]).toMatch(/^hardcover-sdk-typescript\/[\d.]+$/);
   });
 
   it("sends a confidential client's secret, and a public client sends none", async () => {

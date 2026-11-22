@@ -76,7 +76,7 @@ export interface HardcoverClientOptions {
 
   timeoutMs?: number;
 
-  /** Your app's name, sent ahead of the SDK's. Browsers don't let fetch set User-Agent, so it only reaches the server from Node and native. */
+  /** Your app's User-Agent, sent in place of the SDK's default. Browsers don't let fetch set User-Agent, so it only reaches the server from Node and native. */
   userAgent?: string;
   onRateLimit?: (state: RateLimitState) => void;
 
@@ -278,7 +278,7 @@ export class HardcoverClient {
       : normalizeToken(options.token, options.onWarning ?? ((message) => console.warn(message)));
     this.#transport = options.transport ?? fetchTransport({ timeoutMs: options.timeoutMs });
     this.#maxRetries = options.maxRetries ?? constants.defaults.maxRetries;
-    this.#userAgent = options.userAgent ? `${options.userAgent} ${SDK_USER_AGENT}` : SDK_USER_AGENT;
+    this.#userAgent = options.userAgent || SDK_USER_AGENT;
     this.#sleep = options.sleep ?? ((ms) => new Promise((resolve) => setTimeout(resolve, ms)));
 
     this.#allowance = new Allowance({
@@ -455,6 +455,7 @@ export class HardcoverClient {
         "content-type": "application/json",
         accept: "application/json",
         "user-agent": this.#userAgent,
+        [constants.clientHeader.name]: SDK_USER_AGENT,
       },
       body,
     };
