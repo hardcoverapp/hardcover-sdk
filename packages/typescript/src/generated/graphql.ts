@@ -7445,7 +7445,7 @@ export type PromptSummaryFragment = { id: number, slug: string, question: string
 
 export type PromptAnswerFragment = { id: number, description: string | null, promptId: number, bookId: number, userId: number, createdAt: string | null };
 
-export type ActivityFragment = { id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, admin: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null };
+export type ActivityFragment = { id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, viewer_likes: Array<{ id: number }>, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, admin: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null };
 
 export type StatsEditionFragment = { id: number, pages: number | null, audioSeconds: number | null, readingFormatId: number };
 
@@ -8240,30 +8240,33 @@ export type GetFriendsForBookQuery = { following_user_books: Array<{ userBook: {
 
 export type GetActivitiesForUserQueryVariables = Exact<{
   userId: number;
+  viewerId: number;
   limit?: number | null | undefined;
   offset?: number | null | undefined;
 }>;
 
 
-export type GetActivitiesForUserQuery = { activities: Array<{ id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, admin: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null }> };
+export type GetActivitiesForUserQuery = { activities: Array<{ id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, viewer_likes: Array<{ id: number }>, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, admin: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null }> };
 
 export type GetActivitiesForBookQueryVariables = Exact<{
   bookId: number;
+  viewerId: number;
   limit?: number | null | undefined;
   offset?: number | null | undefined;
 }>;
 
 
-export type GetActivitiesForBookQuery = { activities: Array<{ id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, admin: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null }> };
+export type GetActivitiesForBookQuery = { activities: Array<{ id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, viewer_likes: Array<{ id: number }>, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, admin: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null }> };
 
 export type GetFollowingActivitiesQueryVariables = Exact<{
   userId: number;
+  viewerId: number;
   limit?: number | null | undefined;
   offset?: number | null | undefined;
 }>;
 
 
-export type GetFollowingActivitiesQuery = { activities: Array<{ id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, admin: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null }> };
+export type GetFollowingActivitiesQuery = { activities: Array<{ id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, viewer_likes: Array<{ id: number }>, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, admin: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null }> };
 
 export type GetStatsLibraryQueryVariables = Exact<{
   userId: number;
@@ -8694,6 +8697,9 @@ export const ActivityFragmentDoc = new TypedDocumentString(`
   bookId: book_id
   userId: user_id
   likesCount: likes_count
+  viewer_likes: likes(where: { user_id: { _eq: $viewerId } }, limit: 1) {
+    id
+  }
   privacySettingId: privacy_setting_id
   createdAt: created_at
   user {
@@ -11326,7 +11332,7 @@ fragment UserProfile on users {
   createdAt: created_at
 }`) as unknown as TypedDocumentString<GetFriendsForBookQuery, GetFriendsForBookQueryVariables>;
 export const GetActivitiesForUserDocument = new TypedDocumentString(`
-    query GetActivitiesForUser($userId: Int!, $limit: Int = 25, $offset: Int = 0) {
+    query GetActivitiesForUser($userId: Int!, $viewerId: Int!, $limit: Int = 25, $offset: Int = 0) {
   activities(
     where: { user_id: { _eq: $userId } }
     order_by: { created_at: desc }
@@ -11359,6 +11365,9 @@ fragment Activity on activities {
   bookId: book_id
   userId: user_id
   likesCount: likes_count
+  viewer_likes: likes(where: { user_id: { _eq: $viewerId } }, limit: 1) {
+    id
+  }
   privacySettingId: privacy_setting_id
   createdAt: created_at
   user {
@@ -11385,7 +11394,7 @@ fragment UserProfile on users {
   createdAt: created_at
 }`) as unknown as TypedDocumentString<GetActivitiesForUserQuery, GetActivitiesForUserQueryVariables>;
 export const GetActivitiesForBookDocument = new TypedDocumentString(`
-    query GetActivitiesForBook($bookId: Int!, $limit: Int = 25, $offset: Int = 0) {
+    query GetActivitiesForBook($bookId: Int!, $viewerId: Int!, $limit: Int = 25, $offset: Int = 0) {
   activities(
     where: { book_id: { _eq: $bookId } }
     order_by: { created_at: desc }
@@ -11418,6 +11427,9 @@ fragment Activity on activities {
   bookId: book_id
   userId: user_id
   likesCount: likes_count
+  viewer_likes: likes(where: { user_id: { _eq: $viewerId } }, limit: 1) {
+    id
+  }
   privacySettingId: privacy_setting_id
   createdAt: created_at
   user {
@@ -11444,7 +11456,7 @@ fragment UserProfile on users {
   createdAt: created_at
 }`) as unknown as TypedDocumentString<GetActivitiesForBookQuery, GetActivitiesForBookQueryVariables>;
 export const GetFollowingActivitiesDocument = new TypedDocumentString(`
-    query GetFollowingActivities($userId: Int!, $limit: Int = 25, $offset: Int = 0) {
+    query GetFollowingActivities($userId: Int!, $viewerId: Int!, $limit: Int = 25, $offset: Int = 0) {
   activities(
     where: { user: { followed_by_users: { user_id: { _eq: $userId } } } }
     order_by: { created_at: desc }
@@ -11477,6 +11489,9 @@ fragment Activity on activities {
   bookId: book_id
   userId: user_id
   likesCount: likes_count
+  viewer_likes: likes(where: { user_id: { _eq: $viewerId } }, limit: 1) {
+    id
+  }
   privacySettingId: privacy_setting_id
   createdAt: created_at
   user {

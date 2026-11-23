@@ -58,13 +58,13 @@ query GetFriendsForBook($userId: Int!, $bookId: Int!, $limit: Int = 25) {
   }
 }
 
-query GetActivitiesForUser($userId: Int!, $limit: Int = 25, $offset: Int = 0) {
+query GetActivitiesForUser($userId: Int!, $viewerId: Int!, $limit: Int = 25, $offset: Int = 0) {
   activities(where: { user_id: { _eq: $userId } }, order_by: { created_at: desc }, limit: $limit, offset: $offset) {
     ...Activity
   }
 }
 
-query GetActivitiesForBook($bookId: Int!, $limit: Int = 25, $offset: Int = 0) {
+query GetActivitiesForBook($bookId: Int!, $viewerId: Int!, $limit: Int = 25, $offset: Int = 0) {
   activities(where: { book_id: { _eq: $bookId } }, order_by: { created_at: desc }, limit: $limit, offset: $offset) {
     ...Activity
   }
@@ -74,7 +74,7 @@ query GetActivitiesForBook($bookId: Int!, $limit: Int = 25, $offset: Int = 0) {
 # author is followed by the user. (activities.followers looks like it fits but
 # maps the author's own follows, so filtering it by the user finds their own
 # activity.)
-query GetFollowingActivities($userId: Int!, $limit: Int = 25, $offset: Int = 0) {
+query GetFollowingActivities($userId: Int!, $viewerId: Int!, $limit: Int = 25, $offset: Int = 0) {
   activities(
     where: { user: { followed_by_users: { user_id: { _eq: $userId } } } }
     order_by: { created_at: desc }
