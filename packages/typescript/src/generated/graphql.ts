@@ -7594,6 +7594,14 @@ export type AddBookToListMutationVariables = Exact<{
 
 export type AddBookToListMutation = { insert_list_book: { id: number | null, listBook: { id: number, position: number | null, reason: string | null, listId: number, bookId: number, editionId: number | null, dateAdded: string | null } | null } | null };
 
+export type SetListBookEditionMutationVariables = Exact<{
+  id: number;
+  editionId?: number | null | undefined;
+}>;
+
+
+export type SetListBookEditionMutation = { update_list_books_by_pk: { id: number, position: number | null, reason: string | null, listId: number, bookId: number, editionId: number | null, dateAdded: string | null } | null };
+
 export type RemoveListBookMutationVariables = Exact<{
   id: number;
 }>;
@@ -9185,6 +9193,24 @@ export const AddBookToListDocument = new TypedDocumentString(`
   reason
   dateAdded: date_added
 }`) as unknown as TypedDocumentString<AddBookToListMutation, AddBookToListMutationVariables>;
+export const SetListBookEditionDocument = new TypedDocumentString(`
+    mutation SetListBookEdition($id: Int!, $editionId: Int) {
+  update_list_books_by_pk(
+    pk_columns: { id: $id }
+    _set: { edition_id: $editionId }
+  ) {
+    ...ListBook
+  }
+}
+    fragment ListBook on list_books {
+  id
+  listId: list_id
+  bookId: book_id
+  editionId: edition_id
+  position
+  reason
+  dateAdded: date_added
+}`) as unknown as TypedDocumentString<SetListBookEditionMutation, SetListBookEditionMutationVariables>;
 export const RemoveListBookDocument = new TypedDocumentString(`
     mutation RemoveListBook($id: Int!) {
   delete_list_book(id: $id) {

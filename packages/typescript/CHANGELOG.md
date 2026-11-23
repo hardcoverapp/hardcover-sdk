@@ -13,6 +13,9 @@ may rename or remove things; each one is listed here with what to change.
   `X-Hardcover-Client: hardcover-sdk-typescript/<version>`. Browsers don't let
   `fetch` set User-Agent, so this is how Hardcover sees SDK calls from web
   apps too.
+- **`lists.setEdition(listId, bookId, editionId)`.** Changes the edition a book
+  on a list shows, or `null` for the book's default edition. The server only
+  accepts an edition of that book.
 - **Author country.** `authors.get` and `authors.getBySlug` return `country`
   (`id`, `name`, `code2`), or null when none is set.
 

@@ -561,6 +561,12 @@ export const operations = {
    */
   Search: documents.SearchDocument,
   /**
+   * Mutation `SetListBookEdition` on `update_list_books_by_pk`.
+   *
+   * Scopes: `write:lists`.
+   */
+  SetListBookEdition: documents.SetListBookEditionDocument,
+  /**
    * Query `SimilarBookIds` on `books_by_pk`.
    *
    * Scopes: one of `read:catalog`, `read:catalog:data`, `read:catalog:search`.

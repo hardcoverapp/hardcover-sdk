@@ -212,6 +212,72 @@
     }
   },
   {
+    "id": "lists/set-edition",
+    "method": "lists.setEdition",
+    "args": [9, 100, 55],
+    "responses": [
+      { "status": 200, "body": { "data": { "list_books": [{ "id": 70 }] } } },
+      {
+        "status": 200,
+        "body": {
+          "data": {
+            "update_list_books_by_pk": {
+              "id": 70,
+              "list_id": 9,
+              "book_id": 100,
+              "edition_id": 55,
+              "position": 1,
+              "reason": null,
+              "date_added": "2026-11-01T00:00:00+00:00"
+            }
+          }
+        }
+      }
+    ],
+    "expect": {
+      "requests": [
+        { "operationName": "FindListBook", "variables": { "listId": 9, "bookId": 100 } },
+        { "operationName": "SetListBookEdition", "variables": { "id": 70, "editionId": 55 } }
+      ],
+      "result": {
+        "id": 70,
+        "listId": 9,
+        "bookId": 100,
+        "editionId": 55,
+        "position": 1,
+        "reason": null,
+        "dateAdded": "2026-11-01T00:00:00+00:00"
+      }
+    }
+  },
+  {
+    "id": "lists/set-edition-back-to-default",
+    "method": "lists.setEdition",
+    "args": [9, 100, null],
+    "responses": [
+      { "status": 200, "body": { "data": { "list_books": [{ "id": 70 }] } } },
+      { "status": 200, "body": { "data": { "update_list_books_by_pk": { "id": 70, "edition_id": null } } } }
+    ],
+    "expect": {
+      "requests": [
+        { "operationName": "FindListBook", "variables": { "listId": 9, "bookId": 100 } },
+        { "operationName": "SetListBookEdition", "variables": { "id": 70, "editionId": null } }
+      ],
+      "result": { "id": 70, "editionId": null }
+    }
+  },
+  {
+    "id": "lists/set-edition-not-on-the-list",
+    "method": "lists.setEdition",
+    "args": [9, 100, 55],
+    "responses": [{ "status": 200, "body": { "data": { "list_books": [] } } }],
+    "expect": {
+      "requests": [{ "operationName": "FindListBook", "variables": { "listId": 9, "bookId": 100 } }],
+      "error": "NotFoundError",
+      "fields": { "resource": "book on list", "id": 100 }
+    }
+  },
+  {
     "id": "lists/add-books-cleans-codes-in-one-lookup",
     "method": "lists.addBooks",
     "args": [9, ["978-0-593-13520-4", " 0593135202 ", "080442957x"]],
