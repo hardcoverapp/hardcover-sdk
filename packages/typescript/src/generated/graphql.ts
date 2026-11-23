@@ -35,6 +35,7 @@ export type DatesReadInput = {
   finished_at?: string | null | undefined;
   finished_at_precision?: number | null | undefined;
   id?: number | null | undefined;
+  progress?: number | null | undefined;
   progress_pages?: number | null | undefined;
   progress_seconds?: number | null | undefined;
   started_at?: string | null | undefined;
@@ -216,12 +217,34 @@ export type UserBookCreateInput = {
   review_markdown?: string | null | undefined;
   review_slate?: unknown;
   reviewed_at?: string | null | undefined;
+  source?: UserBookSourceSlug | null | undefined;
   sponsored_review?: boolean | null | undefined;
   status_id?: number | null | undefined;
   url?: string | null | undefined;
   user_date?: string | null | undefined;
   user_start_date?: string | null | undefined;
+  viewed_edition_id?: number | null | undefined;
 };
+
+export type UserBookSourceSlug =
+  | 'author'
+  | 'book_page'
+  | 'club'
+  | 'discover'
+  | 'discussion'
+  | 'feed'
+  | 'home'
+  | 'list'
+  | 'other'
+  | 'profile'
+  | 'prompt'
+  | 'search'
+  | 'series'
+  | 'similar'
+  | 'trending'
+  | 'upcoming'
+  | 'vibes'
+  | 'wrapped';
 
 export type UserBookUpdateInput = {
   action_at?: string | null | undefined;
@@ -431,6 +454,7 @@ export type Authors_Avg_Order_By = {
   books_count?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
   id?: Order_By | null | undefined;
@@ -456,6 +480,8 @@ export type Authors_Bool_Exp = {
   canonical_id?: Int_Comparison_Exp | null | undefined;
   contributions?: Contributions_Bool_Exp | null | undefined;
   contributions_aggregate?: Contributions_Aggregate_Bool_Exp | null | undefined;
+  country?: Countries_Bool_Exp | null | undefined;
+  country_id?: Int_Comparison_Exp | null | undefined;
   creator?: Users_Bool_Exp | null | undefined;
   death_date?: Date_Comparison_Exp | null | undefined;
   death_year?: Int_Comparison_Exp | null | undefined;
@@ -488,6 +514,7 @@ export type Authors_Max_Order_By = {
   born_date?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_date?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
@@ -513,6 +540,7 @@ export type Authors_Min_Order_By = {
   born_date?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_date?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
@@ -543,6 +571,8 @@ export type Authors_Order_By = {
   canonical?: Authors_Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
   contributions_aggregate?: Contributions_Aggregate_Order_By | null | undefined;
+  country?: Countries_Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   creator?: Users_Order_By | null | undefined;
   death_date?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
@@ -573,6 +603,7 @@ export type Authors_Stddev_Order_By = {
   books_count?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
   id?: Order_By | null | undefined;
@@ -587,6 +618,7 @@ export type Authors_Stddev_Pop_Order_By = {
   books_count?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
   id?: Order_By | null | undefined;
@@ -601,6 +633,7 @@ export type Authors_Stddev_Samp_Order_By = {
   books_count?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
   id?: Order_By | null | undefined;
@@ -615,6 +648,7 @@ export type Authors_Sum_Order_By = {
   books_count?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
   id?: Order_By | null | undefined;
@@ -629,6 +663,7 @@ export type Authors_Var_Pop_Order_By = {
   books_count?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
   id?: Order_By | null | undefined;
@@ -643,6 +678,7 @@ export type Authors_Var_Samp_Order_By = {
   books_count?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
   id?: Order_By | null | undefined;
@@ -657,6 +693,7 @@ export type Authors_Variance_Order_By = {
   books_count?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
   id?: Order_By | null | undefined;
@@ -2543,13 +2580,26 @@ export type Contributions_Variance_Order_By = {
   id?: Order_By | null | undefined;
 };
 
+/** Boolean expression to filter rows from the table "contributor_role_categories". All fields are combined with a logical 'AND'. */
+export type Contributor_Role_Categories_Bool_Exp = {
+  _and?: Array<Contributor_Role_Categories_Bool_Exp> | null | undefined;
+  _not?: Contributor_Role_Categories_Bool_Exp | null | undefined;
+  _or?: Array<Contributor_Role_Categories_Bool_Exp> | null | undefined;
+  contributor_roles?: Contributor_Roles_Bool_Exp | null | undefined;
+  group?: Int_Comparison_Exp | null | undefined;
+  id?: Int_Comparison_Exp | null | undefined;
+  name?: String_Comparison_Exp | null | undefined;
+};
+
 /** Boolean expression to filter rows from the table "contributor_role_specializations". All fields are combined with a logical 'AND'. */
 export type Contributor_Role_Specializations_Bool_Exp = {
   _and?: Array<Contributor_Role_Specializations_Bool_Exp> | null | undefined;
   _not?: Contributor_Role_Specializations_Bool_Exp | null | undefined;
   _or?: Array<Contributor_Role_Specializations_Bool_Exp> | null | undefined;
   blurb?: String_Comparison_Exp | null | undefined;
+  contributor_role?: Contributor_Roles_Bool_Exp | null | undefined;
   contributor_role_id?: Int_Comparison_Exp | null | undefined;
+  contributor_specialization?: Contributor_Specializations_Bool_Exp | null | undefined;
   contributor_specialization_id?: Int_Comparison_Exp | null | undefined;
   description?: String_Comparison_Exp | null | undefined;
   id?: Int_Comparison_Exp | null | undefined;
@@ -2564,7 +2614,9 @@ export type Contributor_Roles_Bool_Exp = {
   _not?: Contributor_Roles_Bool_Exp | null | undefined;
   _or?: Array<Contributor_Roles_Bool_Exp> | null | undefined;
   blurb?: String_Comparison_Exp | null | undefined;
+  contributor_role_category?: Contributor_Role_Categories_Bool_Exp | null | undefined;
   contributor_role_category_id?: Int_Comparison_Exp | null | undefined;
+  contributor_role_specializations?: Contributor_Role_Specializations_Bool_Exp | null | undefined;
   description?: String_Comparison_Exp | null | undefined;
   id?: Int_Comparison_Exp | null | undefined;
   librarian_instructions?: String_Comparison_Exp | null | undefined;
@@ -2580,6 +2632,7 @@ export type Contributor_Specializations_Bool_Exp = {
   _not?: Contributor_Specializations_Bool_Exp | null | undefined;
   _or?: Array<Contributor_Specializations_Bool_Exp> | null | undefined;
   blurb?: String_Comparison_Exp | null | undefined;
+  contributor_role_specializations?: Contributor_Role_Specializations_Bool_Exp | null | undefined;
   description?: String_Comparison_Exp | null | undefined;
   id?: Int_Comparison_Exp | null | undefined;
   librarian_instructions?: String_Comparison_Exp | null | undefined;
@@ -7629,7 +7682,7 @@ export type DeletePromptMutationVariables = Exact<{
 }>;
 
 
-export type DeletePromptMutation = { delete_prompts_by_pk: { id: number } | null };
+export type DeletePromptMutation = { delete_prompt: { id: number | null, error: string | null } | null };
 
 export type AnswerPromptMutationVariables = Exact<{
   object: PromptAnswerCreateInput;
@@ -9253,8 +9306,9 @@ export const UpdatePromptDocument = new TypedDocumentString(`
 }`) as unknown as TypedDocumentString<UpdatePromptMutation, UpdatePromptMutationVariables>;
 export const DeletePromptDocument = new TypedDocumentString(`
     mutation DeletePrompt($id: Int!) {
-  delete_prompts_by_pk(id: $id) {
+  delete_prompt(id: $id) {
     id
+    error
   }
 }
     `) as unknown as TypedDocumentString<DeletePromptMutation, DeletePromptMutationVariables>;

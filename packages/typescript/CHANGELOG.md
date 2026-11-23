@@ -21,6 +21,14 @@ may rename or remove things; each one is listed here with what to change.
   new header already names the SDK. Without one, User-Agent is still
   `hardcover-sdk-typescript/<version>`.
 
+### Fixed
+
+- **`prompts.delete` works again.** The API replaced the table delete it used
+  with a `delete_prompt` action. A missing prompt, or one that isn't yours,
+  still throws `NotFoundError`. The server now refuses prompts with more than
+  10 answers, or that other readers have answered or bookmarked, as
+  `ActionError` with its reason.
+
 ## 0.1.1 - 2026-10-29
 
 More of what the site shows, typed, and one naming fix. Nothing is removed;
