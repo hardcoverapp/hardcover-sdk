@@ -3,30 +3,152 @@
     "id": "activities/for-user",
     "method": "activities.forUser",
     "args": [7],
-    "responses": [{ "status": 200, "body": { "data": { "activities": [{ "id": 1, "event": "UserBookActivity" }] } } }],
+    "responses": [
+      {
+        "status": 200,
+        "body": {
+          "data": {
+            "me": [
+              { "id": 42, "username": "reader", "account_privacy_setting_id": 2, "activity_privacy_settings_id": 3 }
+            ]
+          }
+        }
+      },
+      {
+        "status": 200,
+        "body": {
+          "data": {
+            "activities": [
+              { "id": 1, "event": "UserBookActivity", "viewer_likes": [] },
+              { "id": 2, "event": "UserBookActivity", "viewer_likes": [{ "id": 9 }] }
+            ]
+          }
+        }
+      }
+    ],
     "expect": {
-      "requests": [{ "operationName": "GetActivitiesForUser", "variables": { "userId": 7, "limit": 25, "offset": 0 } }],
-      "result": { "items": [{ "id": 1, "event": "UserBookActivity" }], "limit": 25, "offset": 0, "hasMore": false }
+      "requests": [
+        { "operationName": "Me", "variables": {} },
+        {
+          "operationName": "GetActivitiesForUser",
+          "variables": { "userId": 7, "viewerId": 42, "limit": 25, "offset": 0 }
+        }
+      ],
+      "result": {
+        "items": [
+          { "id": 1, "event": "UserBookActivity", "likedByMe": false },
+          { "id": 2, "event": "UserBookActivity", "likedByMe": true }
+        ],
+        "limit": 25,
+        "offset": 0,
+        "hasMore": false
+      }
     }
   },
   {
     "id": "activities/for-user-caps-limit",
     "method": "activities.forUser",
     "args": [7, { "limit": 500, "offset": 100 }],
-    "responses": [{ "status": 200, "body": { "data": { "activities": [{ "id": 1, "event": "UserBookActivity" }] } } }],
+    "responses": [
+      {
+        "status": 200,
+        "body": {
+          "data": {
+            "me": [
+              { "id": 42, "username": "reader", "account_privacy_setting_id": 2, "activity_privacy_settings_id": 3 }
+            ]
+          }
+        }
+      },
+      {
+        "status": 200,
+        "body": { "data": { "activities": [{ "id": 1, "event": "UserBookActivity", "viewer_likes": [] }] } }
+      }
+    ],
     "expect": {
-      "requests": [{ "operationName": "GetActivitiesForUser", "variables": { "userId": 7, "limit": 100, "offset": 100 } }],
-      "result": { "items": [{ "id": 1, "event": "UserBookActivity" }], "limit": 100, "offset": 100, "hasMore": false }
+      "requests": [
+        { "operationName": "Me", "variables": {} },
+        {
+          "operationName": "GetActivitiesForUser",
+          "variables": { "userId": 7, "viewerId": 42, "limit": 100, "offset": 100 }
+        }
+      ],
+      "result": {
+        "items": [{ "id": 1, "event": "UserBookActivity", "likedByMe": false }],
+        "limit": 100,
+        "offset": 100,
+        "hasMore": false
+      }
     }
   },
   {
     "id": "activities/for-book",
     "method": "activities.forBook",
     "args": [100, { "limit": 1, "offset": 1 }],
-    "responses": [{ "status": 200, "body": { "data": { "activities": [{ "id": 1, "event": "UserBookActivity" }] } } }],
+    "responses": [
+      {
+        "status": 200,
+        "body": {
+          "data": {
+            "me": [
+              { "id": 42, "username": "reader", "account_privacy_setting_id": 2, "activity_privacy_settings_id": 3 }
+            ]
+          }
+        }
+      },
+      {
+        "status": 200,
+        "body": { "data": { "activities": [{ "id": 1, "event": "UserBookActivity", "viewer_likes": [] }] } }
+      }
+    ],
     "expect": {
-      "requests": [{ "operationName": "GetActivitiesForBook", "variables": { "bookId": 100, "limit": 1, "offset": 1 } }],
-      "result": { "items": [{ "id": 1, "event": "UserBookActivity" }], "limit": 1, "offset": 1, "hasMore": true }
+      "requests": [
+        { "operationName": "Me", "variables": {} },
+        {
+          "operationName": "GetActivitiesForBook",
+          "variables": { "bookId": 100, "viewerId": 42, "limit": 1, "offset": 1 }
+        }
+      ],
+      "result": {
+        "items": [{ "id": 1, "event": "UserBookActivity", "likedByMe": false }],
+        "limit": 1,
+        "offset": 1,
+        "hasMore": true
+      }
+    }
+  },
+  {
+    "id": "activities/for-book-without-read-me",
+    "method": "activities.forBook",
+    "args": [100],
+    "responses": [
+      {
+        "status": 403,
+        "body": {
+          "error": "insufficient_scope",
+          "error_description": "Missing scopes: read:me:content",
+          "scope": "read:me:content"
+        }
+      },
+      {
+        "status": 200,
+        "body": { "data": { "activities": [{ "id": 1, "event": "UserBookActivity", "viewer_likes": [] }] } }
+      }
+    ],
+    "expect": {
+      "requests": [
+        { "operationName": "Me", "variables": {} },
+        {
+          "operationName": "GetActivitiesForBook",
+          "variables": { "bookId": 100, "viewerId": 0, "limit": 25, "offset": 0 }
+        }
+      ],
+      "result": {
+        "items": [{ "id": 1, "event": "UserBookActivity", "likedByMe": null }],
+        "limit": 25,
+        "offset": 0,
+        "hasMore": false
+      }
     }
   },
   {
@@ -39,24 +161,30 @@
         "body": {
           "data": {
             "me": [
-              {
-                "id": 42,
-                "username": "reader",
-                "account_privacy_setting_id": 2,
-                "activity_privacy_settings_id": 3
-              }
+              { "id": 42, "username": "reader", "account_privacy_setting_id": 2, "activity_privacy_settings_id": 3 }
             ]
           }
         }
       },
-      { "status": 200, "body": { "data": { "activities": [{ "id": 1, "event": "UserBookActivity" }] } } }
+      {
+        "status": 200,
+        "body": { "data": { "activities": [{ "id": 1, "event": "UserBookActivity", "viewer_likes": [{ "id": 9 }] }] } }
+      }
     ],
     "expect": {
       "requests": [
         { "operationName": "Me", "variables": {} },
-        { "operationName": "GetFollowingActivities", "variables": { "userId": 42, "limit": 5, "offset": 0 } }
+        {
+          "operationName": "GetFollowingActivities",
+          "variables": { "userId": 42, "viewerId": 42, "limit": 5, "offset": 0 }
+        }
       ],
-      "result": { "items": [{ "id": 1, "event": "UserBookActivity" }], "limit": 5, "offset": 0, "hasMore": false }
+      "result": {
+        "items": [{ "id": 1, "event": "UserBookActivity", "likedByMe": true }],
+        "limit": 5,
+        "offset": 0,
+        "hasMore": false
+      }
     }
   },
   {

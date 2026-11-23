@@ -96,14 +96,16 @@ function progressFields(read: Read, input: ProgressInput): Record<string, number
       throw new RangeError("This read's audiobook edition has no length; pass seconds instead of percent");
     }
 
-    return { progress_seconds: Math.ceil((percent / 100) * edition.audioSeconds) };
+    return { progress_seconds: Math.ceil((percent / 100) * edition.audioSeconds), progress: percent };
   }
 
   if (!edition?.pages) {
     throw new RangeError("This read's edition has no page count; pass pages instead of percent");
   }
 
-  return { progress_pages: Math.ceil((percent / 100) * edition.pages) };
+  // The percent goes along with the page so the server can keep it as typed:
+  // on a short book, a 1% step can round to the same page.
+  return { progress_pages: Math.ceil((percent / 100) * edition.pages), progress: percent };
 }
 
 /**

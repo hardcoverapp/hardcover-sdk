@@ -119,6 +119,21 @@ describe("JSON columns", () => {
     expect(second?.cachedFeaturedSeries.series).toBeUndefined();
   });
 
+  it("put the ratings distribution lowest first, with both fields", async () => {
+    // The site stores the counts in whatever order the database grouped them.
+    const shuffled = { ...redRising, ratingsDistribution: [{ rating: 4, count: 9 }, { rating: 1.5, count: 1 }, { rating: 5, count: 3 }] };
+    const { client } = setup(ok({ books_by_pk: shuffled }));
+
+    const book = await client.books.get(427473);
+
+    expect(book?.ratingsDistribution).toEqual([
+      { rating: 1.5, count: 1 },
+      { rating: 4, count: 9 },
+      { rating: 5, count: 3 },
+    ]);
+    expectTypeOf<RatingCount>().toEqualTypeOf<{ rating: number; count: number }>();
+  });
+
   it("add camelCase copies of snake_case keys, keeping the stored ones", async () => {
     const withCredit = {
       ...redRising,

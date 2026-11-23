@@ -1,5 +1,5 @@
 import type { HardcoverClient } from "../core/client.ts";
-import { NotFoundError } from "../core/errors.ts";
+import { ActionError, NotFoundError } from "../core/errors.ts";
 import type { WithJsonColumns } from "../core/json-columns.ts";
 import { PrivacySetting } from "../generated/enums.ts";
 import type {
@@ -61,6 +61,9 @@ export interface PromptAnswerResult {
   answer: PromptAnswer;
   answersCount: number;
 }
+
+// delete_prompt's message for a prompt that doesn't exist or isn't yours.
+const PROMPT_NOT_FOUND = "Prompt not found";
 
 const SORTS: Record<NonNullable<PromptListOptions["sort"]>, Prompts_Order_By[]> = {
   popular: [{ answers_count: "desc" }, { id: "desc" }],
@@ -200,11 +203,25 @@ export class PromptsResource {
     return required(update_prompt?.prompt, "update_prompt", "prompt");
   }
 
-  /** Deletes your prompt and every answer to it. Scopes: `write:prompts`. */
+  /**
+   * Deletes your prompt. Throws NotFoundError when it doesn't exist or isn't
+   * yours. The server refuses, as ActionError, a prompt with more than 10
+   * answers or one other readers have answered or bookmarked.
+   * Scopes: `write:prompts`.
+   */
   async delete(id: number): Promise<void> {
-    const { delete_prompts_by_pk } = await this.client.request(operations.DeletePrompt, { id });
+    try {
+      const { delete_prompt } = await this.client.request(operations.DeletePrompt, { id });
 
-    if (!delete_prompts_by_pk) throw new NotFoundError("prompt", id);
+      if (!delete_prompt?.id) throw new NotFoundError("prompt", id);
+    } catch (error) {
+      // The action reports a missing prompt as a message, not a null row.
+      if (error instanceof ActionError && error.messages.includes(PROMPT_NOT_FOUND)) {
+        throw new NotFoundError("prompt", id, { cause: error });
+      }
+
+      throw error;
+    }
   }
 
   // ---- Answering ----

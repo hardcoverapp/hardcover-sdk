@@ -122,10 +122,14 @@ export interface CachedFeaturedSeries {
   unreleased?: boolean;
 }
 
-/** How many ratings a book has at one star value (half stars included). */
+/**
+ * How many ratings a book has at one star value (half stars included). The
+ * site writes both fields for every entry, and only for star values someone
+ * gave, so a histogram fills in the missing steps with zero.
+ */
 export interface RatingCount {
-  rating?: number;
-  count?: number;
+  rating: number;
+  count: number;
 }
 
 /**
@@ -233,7 +237,13 @@ function fixFeaturedSeries(featured: unknown): void {
   if (isObject(featured)) copyKeys(featured.series, seriesKeys);
 }
 
+// The site stores the counts in whatever order the database grouped them.
+function sortRatings(ratings: unknown): void {
+  if (Array.isArray(ratings)) ratings.sort((a, b) => (isObject(a) && isObject(b) ? Number(a.rating) - Number(b.rating) : 0));
+}
+
 const columnFixes: Record<string, (column: unknown) => void> = {
+  ratingsDistribution: sortRatings,
   cachedImage: fixImage,
   cachedHeaderImage: fixImage,
   cachedCover: fixImage,
@@ -243,7 +253,8 @@ const columnFixes: Record<string, (column: unknown) => void> = {
 
 /**
  * Adds the camelCase copies of snake_case keys inside JSON columns, in place,
- * anywhere in a response. `request()` runs it on every result.
+ * anywhere in a response, and puts the ratings distribution lowest first.
+ * `request()` runs it on every result.
  */
 export function withIdiomaticKeys<T>(value: T): T {
   if (Array.isArray(value)) {

@@ -190,6 +190,27 @@ export class ListsResource {
   }
 
   /**
+   * Changes the edition a book on the list shows, or pass null for the book's
+   * default edition. The edition must belong to that book; the server refuses
+   * any other. Two requests: the entry is looked up first.
+   * Scopes: `read:lists`, `write:lists`.
+   */
+  async setEdition(listId: number, bookId: number, editionId: number | null): Promise<ListBookRow> {
+    const { list_books } = await this.client.request(operations.FindListBook, { listId, bookId });
+
+    const row = list_books[0];
+    if (!row) throw new NotFoundError("book on list", bookId);
+
+    const { update_list_books_by_pk } = await this.client.request(operations.SetListBookEdition, {
+      id: row.id,
+      editionId,
+    });
+
+    if (!update_list_books_by_pk) throw new NotFoundError("book on list", bookId);
+    return update_list_books_by_pk;
+  }
+
+  /**
    * Bulk add by ISBN, e.g. from a shelf of barcode scans. Exact matches only:
    * every code is looked up against ISBN-13 and ISBN-10 in one request, exact
    * editions are added in batches, and anything else is reported, never

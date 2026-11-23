@@ -117,7 +117,7 @@ export const operations = {
    */
   DeleteList: documents.DeleteListDocument,
   /**
-   * Mutation `DeletePrompt` on `delete_prompts_by_pk`.
+   * Mutation `DeletePrompt` on `delete_prompt`.
    *
    * Scopes: `write:prompts`.
    */
@@ -560,6 +560,12 @@ export const operations = {
    * Scopes: one of `read:catalog`, `read:catalog:search`.
    */
   Search: documents.SearchDocument,
+  /**
+   * Mutation `SetListBookEdition` on `update_list_books_by_pk`.
+   *
+   * Scopes: `write:lists`.
+   */
+  SetListBookEdition: documents.SetListBookEditionDocument,
   /**
    * Query `SimilarBookIds` on `books_by_pk`.
    *

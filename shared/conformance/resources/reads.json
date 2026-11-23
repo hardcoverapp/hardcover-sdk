@@ -217,7 +217,7 @@
     "expect": {
       "requests": [
         { "operationName": "GetUserBook", "variables": { "id": 7 } },
-        { "operationName": "UpdateUserBookRead", "variables": { "id": 2, "read": { "progress_pages": 72 } } }
+        { "operationName": "UpdateUserBookRead", "variables": { "id": 2, "read": { "progress_pages": 72, "progress": 15 } } }
       ],
       "result": { "id": 2 }
     }
@@ -257,7 +257,7 @@
         { "operationName": "GetUserBook", "variables": { "id": 7 } },
         {
           "operationName": "UpdateUserBookRead",
-          "variables": { "id": 3, "read": { "progress_seconds": 18000 } }
+          "variables": { "id": 3, "read": { "progress_seconds": 18000, "progress": 50 } }
         }
       ],
       "result": { "id": 3 }

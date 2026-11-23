@@ -1,5 +1,7 @@
 # An entry in an activity feed: what happened (event, data), to which book,
 # by whom.
+# viewer_likes is the signed-in reader's own like, if any (at most one): the
+# SDK turns it into likedByMe. Queries using this fragment declare $viewerId.
 fragment Activity on activities {
   id
   event
@@ -8,6 +10,9 @@ fragment Activity on activities {
   book_id
   user_id
   likes_count
+  viewer_likes: likes(where: { user_id: { _eq: $viewerId } }, limit: 1) {
+    id
+  }
   privacy_setting_id
   created_at
   user {

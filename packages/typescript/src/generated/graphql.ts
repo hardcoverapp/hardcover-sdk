@@ -35,6 +35,7 @@ export type DatesReadInput = {
   finished_at?: string | null | undefined;
   finished_at_precision?: number | null | undefined;
   id?: number | null | undefined;
+  progress?: number | null | undefined;
   progress_pages?: number | null | undefined;
   progress_seconds?: number | null | undefined;
   started_at?: string | null | undefined;
@@ -216,12 +217,34 @@ export type UserBookCreateInput = {
   review_markdown?: string | null | undefined;
   review_slate?: unknown;
   reviewed_at?: string | null | undefined;
+  source?: UserBookSourceSlug | null | undefined;
   sponsored_review?: boolean | null | undefined;
   status_id?: number | null | undefined;
   url?: string | null | undefined;
   user_date?: string | null | undefined;
   user_start_date?: string | null | undefined;
+  viewed_edition_id?: number | null | undefined;
 };
+
+export type UserBookSourceSlug =
+  | 'author'
+  | 'book_page'
+  | 'club'
+  | 'discover'
+  | 'discussion'
+  | 'feed'
+  | 'home'
+  | 'list'
+  | 'other'
+  | 'profile'
+  | 'prompt'
+  | 'search'
+  | 'series'
+  | 'similar'
+  | 'trending'
+  | 'upcoming'
+  | 'vibes'
+  | 'wrapped';
 
 export type UserBookUpdateInput = {
   action_at?: string | null | undefined;
@@ -431,6 +454,7 @@ export type Authors_Avg_Order_By = {
   books_count?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
   id?: Order_By | null | undefined;
@@ -456,6 +480,8 @@ export type Authors_Bool_Exp = {
   canonical_id?: Int_Comparison_Exp | null | undefined;
   contributions?: Contributions_Bool_Exp | null | undefined;
   contributions_aggregate?: Contributions_Aggregate_Bool_Exp | null | undefined;
+  country?: Countries_Bool_Exp | null | undefined;
+  country_id?: Int_Comparison_Exp | null | undefined;
   creator?: Users_Bool_Exp | null | undefined;
   death_date?: Date_Comparison_Exp | null | undefined;
   death_year?: Int_Comparison_Exp | null | undefined;
@@ -488,6 +514,7 @@ export type Authors_Max_Order_By = {
   born_date?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_date?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
@@ -513,6 +540,7 @@ export type Authors_Min_Order_By = {
   born_date?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_date?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
@@ -543,6 +571,8 @@ export type Authors_Order_By = {
   canonical?: Authors_Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
   contributions_aggregate?: Contributions_Aggregate_Order_By | null | undefined;
+  country?: Countries_Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   creator?: Users_Order_By | null | undefined;
   death_date?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
@@ -573,6 +603,7 @@ export type Authors_Stddev_Order_By = {
   books_count?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
   id?: Order_By | null | undefined;
@@ -587,6 +618,7 @@ export type Authors_Stddev_Pop_Order_By = {
   books_count?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
   id?: Order_By | null | undefined;
@@ -601,6 +633,7 @@ export type Authors_Stddev_Samp_Order_By = {
   books_count?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
   id?: Order_By | null | undefined;
@@ -615,6 +648,7 @@ export type Authors_Sum_Order_By = {
   books_count?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
   id?: Order_By | null | undefined;
@@ -629,6 +663,7 @@ export type Authors_Var_Pop_Order_By = {
   books_count?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
   id?: Order_By | null | undefined;
@@ -643,6 +678,7 @@ export type Authors_Var_Samp_Order_By = {
   books_count?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
   id?: Order_By | null | undefined;
@@ -657,6 +693,7 @@ export type Authors_Variance_Order_By = {
   books_count?: Order_By | null | undefined;
   born_year?: Order_By | null | undefined;
   canonical_id?: Order_By | null | undefined;
+  country_id?: Order_By | null | undefined;
   death_year?: Order_By | null | undefined;
   gender_id?: Order_By | null | undefined;
   id?: Order_By | null | undefined;
@@ -2543,13 +2580,26 @@ export type Contributions_Variance_Order_By = {
   id?: Order_By | null | undefined;
 };
 
+/** Boolean expression to filter rows from the table "contributor_role_categories". All fields are combined with a logical 'AND'. */
+export type Contributor_Role_Categories_Bool_Exp = {
+  _and?: Array<Contributor_Role_Categories_Bool_Exp> | null | undefined;
+  _not?: Contributor_Role_Categories_Bool_Exp | null | undefined;
+  _or?: Array<Contributor_Role_Categories_Bool_Exp> | null | undefined;
+  contributor_roles?: Contributor_Roles_Bool_Exp | null | undefined;
+  group?: Int_Comparison_Exp | null | undefined;
+  id?: Int_Comparison_Exp | null | undefined;
+  name?: String_Comparison_Exp | null | undefined;
+};
+
 /** Boolean expression to filter rows from the table "contributor_role_specializations". All fields are combined with a logical 'AND'. */
 export type Contributor_Role_Specializations_Bool_Exp = {
   _and?: Array<Contributor_Role_Specializations_Bool_Exp> | null | undefined;
   _not?: Contributor_Role_Specializations_Bool_Exp | null | undefined;
   _or?: Array<Contributor_Role_Specializations_Bool_Exp> | null | undefined;
   blurb?: String_Comparison_Exp | null | undefined;
+  contributor_role?: Contributor_Roles_Bool_Exp | null | undefined;
   contributor_role_id?: Int_Comparison_Exp | null | undefined;
+  contributor_specialization?: Contributor_Specializations_Bool_Exp | null | undefined;
   contributor_specialization_id?: Int_Comparison_Exp | null | undefined;
   description?: String_Comparison_Exp | null | undefined;
   id?: Int_Comparison_Exp | null | undefined;
@@ -2564,7 +2614,9 @@ export type Contributor_Roles_Bool_Exp = {
   _not?: Contributor_Roles_Bool_Exp | null | undefined;
   _or?: Array<Contributor_Roles_Bool_Exp> | null | undefined;
   blurb?: String_Comparison_Exp | null | undefined;
+  contributor_role_category?: Contributor_Role_Categories_Bool_Exp | null | undefined;
   contributor_role_category_id?: Int_Comparison_Exp | null | undefined;
+  contributor_role_specializations?: Contributor_Role_Specializations_Bool_Exp | null | undefined;
   description?: String_Comparison_Exp | null | undefined;
   id?: Int_Comparison_Exp | null | undefined;
   librarian_instructions?: String_Comparison_Exp | null | undefined;
@@ -2580,6 +2632,7 @@ export type Contributor_Specializations_Bool_Exp = {
   _not?: Contributor_Specializations_Bool_Exp | null | undefined;
   _or?: Array<Contributor_Specializations_Bool_Exp> | null | undefined;
   blurb?: String_Comparison_Exp | null | undefined;
+  contributor_role_specializations?: Contributor_Role_Specializations_Bool_Exp | null | undefined;
   description?: String_Comparison_Exp | null | undefined;
   id?: Int_Comparison_Exp | null | undefined;
   librarian_instructions?: String_Comparison_Exp | null | undefined;
@@ -7368,7 +7421,7 @@ export type AuthorSummaryFragment = { id: number, slug: string | null, name: str
 
 export type SeriesSummaryFragment = { id: number, slug: string, name: string, booksCount: number, primaryBooksCount: number | null, isCompleted: boolean | null };
 
-export type AuthorDetailFragment = { bio: string | null, location: string | null, id: number, slug: string | null, name: string, bornYear: number | null, deathYear: number | null, usersCount: number, canonicalId: number | null, cachedImage: unknown, booksCount: number };
+export type AuthorDetailFragment = { bio: string | null, location: string | null, id: number, slug: string | null, name: string, bornYear: number | null, deathYear: number | null, usersCount: number, canonicalId: number | null, cachedImage: unknown, booksCount: number, country: { id: number, name: string | null, code2: string | null } | null };
 
 export type SeriesDetailFragment = { description: string | null, id: number, slug: string, name: string, canonicalId: number | null, booksCount: number, primaryBooksCount: number | null, isCompleted: boolean | null, author: { id: number, slug: string | null, name: string, cachedImage: unknown, booksCount: number } | null };
 
@@ -7392,7 +7445,7 @@ export type PromptSummaryFragment = { id: number, slug: string, question: string
 
 export type PromptAnswerFragment = { id: number, description: string | null, promptId: number, bookId: number, userId: number, createdAt: string | null };
 
-export type ActivityFragment = { id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, admin: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null };
+export type ActivityFragment = { id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, viewer_likes: Array<{ id: number }>, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, admin: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null };
 
 export type StatsEditionFragment = { id: number, pages: number | null, audioSeconds: number | null, readingFormatId: number };
 
@@ -7541,6 +7594,14 @@ export type AddBookToListMutationVariables = Exact<{
 
 export type AddBookToListMutation = { insert_list_book: { id: number | null, listBook: { id: number, position: number | null, reason: string | null, listId: number, bookId: number, editionId: number | null, dateAdded: string | null } | null } | null };
 
+export type SetListBookEditionMutationVariables = Exact<{
+  id: number;
+  editionId?: number | null | undefined;
+}>;
+
+
+export type SetListBookEditionMutation = { update_list_books_by_pk: { id: number, position: number | null, reason: string | null, listId: number, bookId: number, editionId: number | null, dateAdded: string | null } | null };
+
 export type RemoveListBookMutationVariables = Exact<{
   id: number;
 }>;
@@ -7629,7 +7690,7 @@ export type DeletePromptMutationVariables = Exact<{
 }>;
 
 
-export type DeletePromptMutation = { delete_prompts_by_pk: { id: number } | null };
+export type DeletePromptMutation = { delete_prompt: { id: number | null, error: string | null } | null };
 
 export type AnswerPromptMutationVariables = Exact<{
   object: PromptAnswerCreateInput;
@@ -7747,14 +7808,14 @@ export type GetAuthorQueryVariables = Exact<{
 }>;
 
 
-export type GetAuthorQuery = { authors_by_pk: { bio: string | null, location: string | null, id: number, slug: string | null, name: string, bornYear: number | null, deathYear: number | null, usersCount: number, canonicalId: number | null, cachedImage: unknown, booksCount: number } | null };
+export type GetAuthorQuery = { authors_by_pk: { bio: string | null, location: string | null, id: number, slug: string | null, name: string, bornYear: number | null, deathYear: number | null, usersCount: number, canonicalId: number | null, cachedImage: unknown, booksCount: number, country: { id: number, name: string | null, code2: string | null } | null } | null };
 
 export type GetAuthorBySlugQueryVariables = Exact<{
   slug: string;
 }>;
 
 
-export type GetAuthorBySlugQuery = { authors: Array<{ bio: string | null, location: string | null, id: number, slug: string | null, name: string, bornYear: number | null, deathYear: number | null, usersCount: number, canonicalId: number | null, cachedImage: unknown, booksCount: number }> };
+export type GetAuthorBySlugQuery = { authors: Array<{ bio: string | null, location: string | null, id: number, slug: string | null, name: string, bornYear: number | null, deathYear: number | null, usersCount: number, canonicalId: number | null, cachedImage: unknown, booksCount: number, country: { id: number, name: string | null, code2: string | null } | null }> };
 
 export type GetAuthorBooksQueryVariables = Exact<{
   authorId: number;
@@ -8179,30 +8240,33 @@ export type GetFriendsForBookQuery = { following_user_books: Array<{ userBook: {
 
 export type GetActivitiesForUserQueryVariables = Exact<{
   userId: number;
+  viewerId: number;
   limit?: number | null | undefined;
   offset?: number | null | undefined;
 }>;
 
 
-export type GetActivitiesForUserQuery = { activities: Array<{ id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, admin: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null }> };
+export type GetActivitiesForUserQuery = { activities: Array<{ id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, viewer_likes: Array<{ id: number }>, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, admin: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null }> };
 
 export type GetActivitiesForBookQueryVariables = Exact<{
   bookId: number;
+  viewerId: number;
   limit?: number | null | undefined;
   offset?: number | null | undefined;
 }>;
 
 
-export type GetActivitiesForBookQuery = { activities: Array<{ id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, admin: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null }> };
+export type GetActivitiesForBookQuery = { activities: Array<{ id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, viewer_likes: Array<{ id: number }>, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, admin: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null }> };
 
 export type GetFollowingActivitiesQueryVariables = Exact<{
   userId: number;
+  viewerId: number;
   limit?: number | null | undefined;
   offset?: number | null | undefined;
 }>;
 
 
-export type GetFollowingActivitiesQuery = { activities: Array<{ id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, admin: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null }> };
+export type GetFollowingActivitiesQuery = { activities: Array<{ id: number, event: string, data: unknown, objectType: string, bookId: number | null, userId: number, likesCount: number, privacySettingId: number, createdAt: string | null, viewer_likes: Array<{ id: number }>, user: { id: number, username: string | null, name: string | null, bio: string | null, flair: string | null, pro: boolean, admin: boolean, cachedImage: unknown, cachedCover: unknown, cachedGenres: unknown, booksCount: number, followersCount: number, followedUsersCount: number, createdAt: string }, book: { id: number, slug: string | null, title: string | null, subtitle: string | null, pages: number | null, rating: number | null, releaseYear: number | null, audioSeconds: number | null, ratingsCount: number, usersCount: number, cachedImage: unknown, cachedContributors: unknown, cachedFeaturedSeries: unknown } | null }> };
 
 export type GetStatsLibraryQueryVariables = Exact<{
   userId: number;
@@ -8357,6 +8421,11 @@ export const AuthorDetailFragmentDoc = new TypedDocumentString(`
   location
   usersCount: users_count
   canonicalId: canonical_id
+  country {
+    id
+    name
+    code2
+  }
 }
     fragment AuthorSummary on authors {
   id
@@ -8628,6 +8697,9 @@ export const ActivityFragmentDoc = new TypedDocumentString(`
   bookId: book_id
   userId: user_id
   likesCount: likes_count
+  viewer_likes: likes(where: { user_id: { _eq: $viewerId } }, limit: 1) {
+    id
+  }
   privacySettingId: privacy_setting_id
   createdAt: created_at
   user {
@@ -9127,6 +9199,24 @@ export const AddBookToListDocument = new TypedDocumentString(`
   reason
   dateAdded: date_added
 }`) as unknown as TypedDocumentString<AddBookToListMutation, AddBookToListMutationVariables>;
+export const SetListBookEditionDocument = new TypedDocumentString(`
+    mutation SetListBookEdition($id: Int!, $editionId: Int) {
+  update_list_books_by_pk(
+    pk_columns: { id: $id }
+    _set: { edition_id: $editionId }
+  ) {
+    ...ListBook
+  }
+}
+    fragment ListBook on list_books {
+  id
+  listId: list_id
+  bookId: book_id
+  editionId: edition_id
+  position
+  reason
+  dateAdded: date_added
+}`) as unknown as TypedDocumentString<SetListBookEditionMutation, SetListBookEditionMutationVariables>;
 export const RemoveListBookDocument = new TypedDocumentString(`
     mutation RemoveListBook($id: Int!) {
   delete_list_book(id: $id) {
@@ -9253,8 +9343,9 @@ export const UpdatePromptDocument = new TypedDocumentString(`
 }`) as unknown as TypedDocumentString<UpdatePromptMutation, UpdatePromptMutationVariables>;
 export const DeletePromptDocument = new TypedDocumentString(`
     mutation DeletePrompt($id: Int!) {
-  delete_prompts_by_pk(id: $id) {
+  delete_prompt(id: $id) {
     id
+    error
   }
 }
     `) as unknown as TypedDocumentString<DeletePromptMutation, DeletePromptMutationVariables>;
@@ -9450,6 +9541,11 @@ fragment AuthorDetail on authors {
   location
   usersCount: users_count
   canonicalId: canonical_id
+  country {
+    id
+    name
+    code2
+  }
 }`) as unknown as TypedDocumentString<GetAuthorQuery, GetAuthorQueryVariables>;
 export const GetAuthorBySlugDocument = new TypedDocumentString(`
     query GetAuthorBySlug($slug: String!) {
@@ -9472,6 +9568,11 @@ fragment AuthorDetail on authors {
   location
   usersCount: users_count
   canonicalId: canonical_id
+  country {
+    id
+    name
+    code2
+  }
 }`) as unknown as TypedDocumentString<GetAuthorBySlugQuery, GetAuthorBySlugQueryVariables>;
 export const GetAuthorBooksDocument = new TypedDocumentString(`
     query GetAuthorBooks($authorId: Int!, $limit: Int = 25, $offset: Int = 0) {
@@ -11231,7 +11332,7 @@ fragment UserProfile on users {
   createdAt: created_at
 }`) as unknown as TypedDocumentString<GetFriendsForBookQuery, GetFriendsForBookQueryVariables>;
 export const GetActivitiesForUserDocument = new TypedDocumentString(`
-    query GetActivitiesForUser($userId: Int!, $limit: Int = 25, $offset: Int = 0) {
+    query GetActivitiesForUser($userId: Int!, $viewerId: Int!, $limit: Int = 25, $offset: Int = 0) {
   activities(
     where: { user_id: { _eq: $userId } }
     order_by: { created_at: desc }
@@ -11264,6 +11365,9 @@ fragment Activity on activities {
   bookId: book_id
   userId: user_id
   likesCount: likes_count
+  viewer_likes: likes(where: { user_id: { _eq: $viewerId } }, limit: 1) {
+    id
+  }
   privacySettingId: privacy_setting_id
   createdAt: created_at
   user {
@@ -11290,7 +11394,7 @@ fragment UserProfile on users {
   createdAt: created_at
 }`) as unknown as TypedDocumentString<GetActivitiesForUserQuery, GetActivitiesForUserQueryVariables>;
 export const GetActivitiesForBookDocument = new TypedDocumentString(`
-    query GetActivitiesForBook($bookId: Int!, $limit: Int = 25, $offset: Int = 0) {
+    query GetActivitiesForBook($bookId: Int!, $viewerId: Int!, $limit: Int = 25, $offset: Int = 0) {
   activities(
     where: { book_id: { _eq: $bookId } }
     order_by: { created_at: desc }
@@ -11323,6 +11427,9 @@ fragment Activity on activities {
   bookId: book_id
   userId: user_id
   likesCount: likes_count
+  viewer_likes: likes(where: { user_id: { _eq: $viewerId } }, limit: 1) {
+    id
+  }
   privacySettingId: privacy_setting_id
   createdAt: created_at
   user {
@@ -11349,7 +11456,7 @@ fragment UserProfile on users {
   createdAt: created_at
 }`) as unknown as TypedDocumentString<GetActivitiesForBookQuery, GetActivitiesForBookQueryVariables>;
 export const GetFollowingActivitiesDocument = new TypedDocumentString(`
-    query GetFollowingActivities($userId: Int!, $limit: Int = 25, $offset: Int = 0) {
+    query GetFollowingActivities($userId: Int!, $viewerId: Int!, $limit: Int = 25, $offset: Int = 0) {
   activities(
     where: { user: { followed_by_users: { user_id: { _eq: $userId } } } }
     order_by: { created_at: desc }
@@ -11382,6 +11489,9 @@ fragment Activity on activities {
   bookId: book_id
   userId: user_id
   likesCount: likes_count
+  viewer_likes: likes(where: { user_id: { _eq: $viewerId } }, limit: 1) {
+    id
+  }
   privacySettingId: privacy_setting_id
   createdAt: created_at
   user {

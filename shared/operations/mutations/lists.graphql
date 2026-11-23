@@ -33,6 +33,14 @@ mutation AddBookToList($object: ListBookInput!) {
   }
 }
 
+# Changes the edition a list entry shows. The server only accepts an edition
+# of the entry's own book, or null for the book's default edition.
+mutation SetListBookEdition($id: Int!, $editionId: Int) {
+  update_list_books_by_pk(pk_columns: { id: $id }, _set: { edition_id: $editionId }) {
+    ...ListBook
+  }
+}
+
 # Takes the list_books row id, not (list_id, book_id). The SDK's
 # lists.removeBook(listId, bookId) convenience looks the row up first.
 mutation RemoveListBook($id: Int!) {

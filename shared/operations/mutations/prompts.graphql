@@ -26,8 +26,9 @@ mutation UpdatePrompt($object: UpdatePromptInput!) {
 }
 
 mutation DeletePrompt($id: Int!) {
-  delete_prompts_by_pk(id: $id) {
+  delete_prompt(id: $id) {
     id
+    error
   }
 }
 

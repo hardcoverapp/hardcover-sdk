@@ -1,6 +1,7 @@
 // A real user scanning a shelf into a new list: bulk add by ISBN (as scanners
-// and people type them), a code that can't match, a repeated scan, removing a
-// book, deleting the list. Runs only under `pnpm test:live:writes`; cleans up.
+// and people type them), a code that can't match, a repeated scan, changing a
+// book's edition, removing a book, deleting the list. Runs only under
+// `pnpm test:live:writes`; cleans up.
 import { expect, it } from "vitest";
 import { operations, PrivacySetting } from "../../src/index.ts";
 import { describeLiveWrites, liveClient, popularBookIds, target, trackJournal } from "./setup.ts";
@@ -8,7 +9,7 @@ import { describeLiveWrites, liveClient, popularBookIds, target, trackJournal } 
 describeLiveWrites(`lists: bulk scan into a new list (${target})`, () => {
   const client = liveClient();
 
-  it("addBooks by exact ISBN → repeat is harmless → removeBook → delete", async () => {
+  it("addBooks by exact ISBN → repeat is harmless → setEdition → removeBook → delete", async () => {
     // Three random popular books that have an ISBN-13 edition.
     const scanned: { bookId: number; editionId: number; isbn13: string }[] = [];
     for (const bookId of (await popularBookIds(client)).sort(() => Math.random() - 0.5)) {
@@ -46,6 +47,12 @@ describeLiveWrites(`lists: bulk scan into a new list (${target})`, () => {
       const again = await client.lists.addBooks(list.id, codes);
       expect(again.added.map((a) => a.listBookId)).toEqual(result.added.map((a) => a.listBookId));
       expect((await client.lists.get(list.id))?.listBooks).toHaveLength(3);
+
+      // Switching a book to its default edition and back, as the site's edition picker does.
+      const { bookId, editionId } = result.added[1]!;
+
+      expect((await client.lists.setEdition(list.id, bookId, null)).editionId).toBeNull();
+      expect((await client.lists.setEdition(list.id, bookId, editionId)).editionId).toBe(editionId);
 
       expect(await client.lists.removeBook(list.id, result.added[0]!.bookId)).toBe(true);
       expect(await client.lists.removeBook(list.id, result.added[0]!.bookId)).toBe(false);

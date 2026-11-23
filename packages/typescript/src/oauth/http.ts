@@ -39,7 +39,7 @@ export interface OAuthConfig {
 
   transport?: Transport;
 
-  /** Your app's name, sent ahead of the SDK's in the User-Agent. */
+  /** Your app's User-Agent, sent in place of the SDK's default. */
   userAgent?: string;
 
   /** A secure random source. Defaults to the platform's `crypto`. */
@@ -87,7 +87,7 @@ export function resolveConfig(config: OAuthConfig): ResolvedOAuthConfig {
     clientSecret: config.clientSecret || undefined,
     endpoints,
     transport: config.transport ?? fetchTransport(),
-    userAgent: config.userAgent ? `${config.userAgent} ${SDK_USER_AGENT}` : SDK_USER_AGENT,
+    userAgent: config.userAgent || SDK_USER_AGENT,
     // Looked up when first needed, so a device-only app or a refresh never
     // needs a random source it doesn't use.
     random: () => config.random ?? defaultRandomSource(),
@@ -124,6 +124,7 @@ export async function postForm(
         "content-type": "application/x-www-form-urlencoded",
         accept: "application/json",
         "user-agent": config.userAgent,
+        [constants.clientHeader.name]: SDK_USER_AGENT,
       },
       body,
     });

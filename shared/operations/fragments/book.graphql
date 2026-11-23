@@ -72,6 +72,11 @@ fragment AuthorDetail on authors {
   location
   users_count
   canonical_id
+  country {
+    id
+    name
+    code2
+  }
 }
 
 # A series' page. canonical_id works as for authors.

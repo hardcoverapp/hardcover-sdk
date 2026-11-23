@@ -127,9 +127,8 @@
         "delete_list",
         "delete_list_book",
         "delete_list_member",
+        "delete_prompt",
         "delete_prompt_answer",
-        "delete_prompts",
-        "delete_prompts_by_pk",
         "delete_reading_journal",
         "delete_reading_journals_for_book",
         "delete_user_blocks",
@@ -141,6 +140,7 @@
         "edition_owned",
         "editions",
         "editions_by_pk",
+        "ensure_system_vibes",
         "filter_list_entities",
         "filter_list_entities_aggregate",
         "filter_list_entities_by_pk",
@@ -281,6 +281,7 @@
         "update_publisher",
         "update_reading_journal",
         "update_serie",
+        "update_series",
         "update_user_book",
         "update_user_book_read",
         "update_vibe",
@@ -1254,9 +1255,8 @@
       "implies": [],
       "operations": [
         "delete_followed_prompt",
+        "delete_prompt",
         "delete_prompt_answer",
-        "delete_prompts",
-        "delete_prompts_by_pk",
         "insert_prompt",
         "insert_prompt_answer",
         "update_prompt",
@@ -1316,6 +1316,7 @@
       "implies": [],
       "operations": [
         "delete_vibe",
+        "ensure_system_vibes",
         "insert_vibe",
         "update_vibe"
       ],
@@ -1352,6 +1353,7 @@
         "update_edition",
         "update_publisher",
         "update_serie",
+        "update_series",
         "upsert_book",
         "upsert_tags"
       ],
@@ -1382,6 +1384,7 @@
         "update_edition",
         "update_publisher",
         "update_serie",
+        "update_series",
         "upsert_book",
         "upsert_tags"
       ],
@@ -1408,6 +1411,7 @@
         "update_edition",
         "update_publisher",
         "update_serie",
+        "update_series",
         "upsert_book",
         "upsert_tags"
       ],
@@ -2015,28 +2019,20 @@
       "calls_internal": true
     },
     {
+      "operation": "delete_prompt",
+      "type": "write",
+      "tables": [
+        "prompts"
+      ],
+      "calls_internal": true
+    },
+    {
       "operation": "delete_prompt_answer",
       "type": "write",
       "tables": [
         "prompt_answers"
       ],
       "calls_internal": true
-    },
-    {
-      "operation": "delete_prompts",
-      "type": "delete",
-      "tables": [
-        "prompts"
-      ],
-      "calls_internal": false
-    },
-    {
-      "operation": "delete_prompts_by_pk",
-      "type": "delete",
-      "tables": [
-        "prompts"
-      ],
-      "calls_internal": false
     },
     {
       "operation": "delete_reading_journal",
@@ -2125,6 +2121,12 @@
         "editions"
       ],
       "calls_internal": false
+    },
+    {
+      "operation": "ensure_system_vibes",
+      "type": "write",
+      "tables": [],
+      "calls_internal": true
     },
     {
       "operation": "filter_list_entities",
@@ -3236,6 +3238,14 @@
     },
     {
       "operation": "update_serie",
+      "type": "write",
+      "tables": [
+        "series"
+      ],
+      "calls_internal": true
+    },
+    {
+      "operation": "update_series",
       "type": "write",
       "tables": [
         "series"

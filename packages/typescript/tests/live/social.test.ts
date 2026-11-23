@@ -23,6 +23,9 @@ describeLive(`social: profiles, connections, feeds (${target})`, () => {
 
     const feed = await client.activities.following({ limit: 5 });
     for (const activity of feed.items) expect(activity.userId).not.toBe(me.id);
+
+    // The token can read who's signed in, so every activity says whether you liked it.
+    for (const activity of [...mine.items, ...feed.items]) expect(typeof activity.likedByMe).toBe("boolean");
   });
 
   it("a book's activity and friends", async () => {
@@ -46,18 +49,19 @@ describeLiveWrites(`social: follow, like, block a stranger (${target})`, () => {
     for (const row of (await client.users.followers(me.id, { limit: 100 })).items) known.add(row.user.id);
 
     // Someone active on a popular book who has no connection to you.
-    let stranger: { userId: number; activityId: number } | undefined;
+    let stranger: { userId: number; activityId: number; bookId: number } | undefined;
     for (const bookId of (await popularBookIds(client)).slice(0, 5)) {
       const { items } = await client.activities.forBook(bookId, { limit: 25 });
       const activity = items.find((a) => !known.has(a.userId));
       if (activity) {
-        stranger = { userId: activity.userId, activityId: activity.id };
+        stranger = { userId: activity.userId, activityId: activity.id, bookId };
         break;
       }
     }
     if (!stranger) skip("no stranger's activity found");
 
-    const { userId, activityId } = stranger!;
+    const { userId, activityId, bookId } = stranger!;
+    const likedByMe = async () => (await client.activities.forBook(bookId, { limit: 25 })).items.find((a) => a.id === activityId)?.likedByMe;
 
     await client.users.follow(userId);
     expect((await client.users.following(me.id, { limit: 100 })).items.some((r) => r.followedUser.id === userId)).toBe(true);
@@ -65,8 +69,10 @@ describeLiveWrites(`social: follow, like, block a stranger (${target})`, () => {
     expect((await client.users.following(me.id, { limit: 100 })).items.some((r) => r.followedUser.id === userId)).toBe(false);
 
     const liked = await client.likes.like(LikeableType.Activity, activityId);
+    expect(await likedByMe()).toBe(true);
     const unliked = await client.likes.unlike(LikeableType.Activity, activityId);
     expect(unliked).toBe(liked - 1);
+    expect(await likedByMe()).toBe(false);
 
     await client.users.block(userId, { type: BlockType.Invites });
     expect((await client.users.blocked()).some((b) => b.blockedUser?.id === userId && b.type === BlockType.Invites)).toBe(true);

@@ -604,18 +604,51 @@
     "id": "prompts/delete",
     "method": "prompts.delete",
     "args": [203],
-    "responses": [{ "status": 200, "body": { "data": { "delete_prompts_by_pk": { "id": 203 } } } }],
+    "responses": [{ "status": 200, "body": { "data": { "delete_prompt": { "id": 203, "error": null } } } }],
     "expect": { "requests": [{ "operationName": "DeletePrompt", "variables": { "id": 203 } }], "result": null }
   },
   {
     "id": "prompts/delete-missing",
     "method": "prompts.delete",
     "args": [9],
-    "responses": [{ "status": 200, "body": { "data": { "delete_prompts_by_pk": null } } }],
+    "responses": [{ "status": 200, "body": { "data": { "delete_prompt": null } } }],
     "expect": {
       "requests": [{ "operationName": "DeletePrompt", "variables": { "id": 9 } }],
       "error": "NotFoundError",
       "fields": { "resource": "prompt", "id": 9 }
+    }
+  },
+  {
+    "id": "prompts/delete-not-found-message",
+    "method": "prompts.delete",
+    "args": [9],
+    "responses": [
+      { "status": 200, "body": { "data": { "delete_prompt": { "id": null, "error": "Prompt not found" } } } }
+    ],
+    "expect": {
+      "requests": [{ "operationName": "DeletePrompt", "variables": { "id": 9 } }],
+      "error": "NotFoundError",
+      "fields": { "resource": "prompt", "id": 9 }
+    }
+  },
+  {
+    "id": "prompts/delete-refused",
+    "method": "prompts.delete",
+    "args": [203],
+    "responses": [
+      {
+        "status": 200,
+        "body": {
+          "data": {
+            "delete_prompt": { "id": null, "error": "Prompts other readers have answered or bookmarked can't be deleted" }
+          }
+        }
+      }
+    ],
+    "expect": {
+      "requests": [{ "operationName": "DeletePrompt", "variables": { "id": 203 } }],
+      "error": "ActionError",
+      "fields": { "operation": "delete_prompt" }
     }
   },
   {
