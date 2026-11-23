@@ -7421,7 +7421,7 @@ export type AuthorSummaryFragment = { id: number, slug: string | null, name: str
 
 export type SeriesSummaryFragment = { id: number, slug: string, name: string, booksCount: number, primaryBooksCount: number | null, isCompleted: boolean | null };
 
-export type AuthorDetailFragment = { bio: string | null, location: string | null, id: number, slug: string | null, name: string, bornYear: number | null, deathYear: number | null, usersCount: number, canonicalId: number | null, cachedImage: unknown, booksCount: number };
+export type AuthorDetailFragment = { bio: string | null, location: string | null, id: number, slug: string | null, name: string, bornYear: number | null, deathYear: number | null, usersCount: number, canonicalId: number | null, cachedImage: unknown, booksCount: number, country: { id: number, name: string | null, code2: string | null } | null };
 
 export type SeriesDetailFragment = { description: string | null, id: number, slug: string, name: string, canonicalId: number | null, booksCount: number, primaryBooksCount: number | null, isCompleted: boolean | null, author: { id: number, slug: string | null, name: string, cachedImage: unknown, booksCount: number } | null };
 
@@ -7800,14 +7800,14 @@ export type GetAuthorQueryVariables = Exact<{
 }>;
 
 
-export type GetAuthorQuery = { authors_by_pk: { bio: string | null, location: string | null, id: number, slug: string | null, name: string, bornYear: number | null, deathYear: number | null, usersCount: number, canonicalId: number | null, cachedImage: unknown, booksCount: number } | null };
+export type GetAuthorQuery = { authors_by_pk: { bio: string | null, location: string | null, id: number, slug: string | null, name: string, bornYear: number | null, deathYear: number | null, usersCount: number, canonicalId: number | null, cachedImage: unknown, booksCount: number, country: { id: number, name: string | null, code2: string | null } | null } | null };
 
 export type GetAuthorBySlugQueryVariables = Exact<{
   slug: string;
 }>;
 
 
-export type GetAuthorBySlugQuery = { authors: Array<{ bio: string | null, location: string | null, id: number, slug: string | null, name: string, bornYear: number | null, deathYear: number | null, usersCount: number, canonicalId: number | null, cachedImage: unknown, booksCount: number }> };
+export type GetAuthorBySlugQuery = { authors: Array<{ bio: string | null, location: string | null, id: number, slug: string | null, name: string, bornYear: number | null, deathYear: number | null, usersCount: number, canonicalId: number | null, cachedImage: unknown, booksCount: number, country: { id: number, name: string | null, code2: string | null } | null }> };
 
 export type GetAuthorBooksQueryVariables = Exact<{
   authorId: number;
@@ -8410,6 +8410,11 @@ export const AuthorDetailFragmentDoc = new TypedDocumentString(`
   location
   usersCount: users_count
   canonicalId: canonical_id
+  country {
+    id
+    name
+    code2
+  }
 }
     fragment AuthorSummary on authors {
   id
@@ -9504,6 +9509,11 @@ fragment AuthorDetail on authors {
   location
   usersCount: users_count
   canonicalId: canonical_id
+  country {
+    id
+    name
+    code2
+  }
 }`) as unknown as TypedDocumentString<GetAuthorQuery, GetAuthorQueryVariables>;
 export const GetAuthorBySlugDocument = new TypedDocumentString(`
     query GetAuthorBySlug($slug: String!) {
@@ -9526,6 +9536,11 @@ fragment AuthorDetail on authors {
   location
   usersCount: users_count
   canonicalId: canonical_id
+  country {
+    id
+    name
+    code2
+  }
 }`) as unknown as TypedDocumentString<GetAuthorBySlugQuery, GetAuthorBySlugQueryVariables>;
 export const GetAuthorBooksDocument = new TypedDocumentString(`
     query GetAuthorBooks($authorId: Int!, $limit: Int = 25, $offset: Int = 0) {

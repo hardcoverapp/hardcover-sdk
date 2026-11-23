@@ -13,6 +13,8 @@ may rename or remove things; each one is listed here with what to change.
   `X-Hardcover-Client: hardcover-sdk-typescript/<version>`. Browsers don't let
   `fetch` set User-Agent, so this is how Hardcover sees SDK calls from web
   apps too.
+- **Author country.** `authors.get` and `authors.getBySlug` return `country`
+  (`id`, `name`, `code2`), or null when none is set.
 
 ### Changed
 
