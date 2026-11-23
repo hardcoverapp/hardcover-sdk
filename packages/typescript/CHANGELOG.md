@@ -28,6 +28,10 @@ may rename or remove things; each one is listed here with what to change.
   still throws `NotFoundError`. The server now refuses prompts with more than
   10 answers, or that other readers have answered or bookmarked, as
   `ActionError` with its reason.
+- **Small percent steps save.** `reads.setProgress({ percent })` sends the
+  percent along with the page or second it converts to, so the server keeps
+  it as typed. Before, a 1% step on a short book could round to the same page
+  and not change anything.
 
 ## 0.1.1 - 2026-10-29
 
