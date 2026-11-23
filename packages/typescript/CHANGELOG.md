@@ -33,6 +33,12 @@ may rename or remove things; each one is listed here with what to change.
 
 ### Fixed
 
+- **Ratings distribution, typed and in order.** `RatingCount`'s `rating` and
+  `count` are no longer optional (the site always writes both), and
+  `ratingsDistribution` now really is lowest first, as documented; the site
+  stores it in no particular order. It still lists only star values someone
+  gave, so fill in the missing steps with zero for a histogram.
+
 - **`prompts.delete` works again.** The API replaced the table delete it used
   with a `delete_prompt` action. A missing prompt, or one that isn't yours,
   still throws `NotFoundError`. The server now refuses prompts with more than
